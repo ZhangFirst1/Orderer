@@ -12,7 +12,7 @@ public:
     static void WriteToServer(const QString s);
     static void ReadFromServer(QString& s);
 
-private:
+public:
     static QTcpSocket* server;
 };
 

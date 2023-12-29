@@ -1,11 +1,13 @@
 #include "tcpservers.h"
 
+
 QTcpServer* TcpServers::m_server;
 QTcpSocket* TcpServers::m_client;
 
 TcpServers::TcpServers() {
     Init();
-    newConnection();
+    connect(m_server, &QTcpServer::newConnection, this, &TcpServers::newConnection);
+    //newConnection();
 }
 
 TcpServers::~TcpServers() {
@@ -24,7 +26,7 @@ void TcpServers::newConnection(){
         // 处理客户端的连接请求
         m_client = m_server->nextPendingConnection();
         // 发送数据
-        m_client->write("服务器连接成功");
+        m_client->write("connect to server successfully!");
     }
 }
 

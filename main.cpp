@@ -2,6 +2,7 @@
 #include "tcpclient.h"
 #include "tcpservers.h"
 #include "login.h"
+#include "backend.h"
 
 #include <QApplication>
 #include <iostream>
@@ -13,5 +14,7 @@ int main(int argc, char *argv[])
     //w.show();
     Login l;
     l.show();
+    backend b;
+    b.show();
     return a.exec();
 }

@@ -31,7 +31,9 @@ void TcpServers::newConnection(){
 }
 
 void TcpServers::ReadFromClient(QString& s){
-    // 接受数据
-    QByteArray array = m_client->readAll();
-    s = array;
+    connect(m_client, &QTcpSocket::readyRead, [&](){
+        // 接受数据
+        QByteArray array = m_client->readAll();
+        s = array;
+    });
 }

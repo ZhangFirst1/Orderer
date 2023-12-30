@@ -4,7 +4,7 @@
 #include <QTcpServer>
 #include <QByteArray>
 
-class TcpServers: public QObject
+class TcpServers: public QTcpServer
 {
     Q_OBJECT
 public:

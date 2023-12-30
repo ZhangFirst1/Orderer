@@ -4,6 +4,12 @@
 QTcpServer* TcpServers::m_server;
 QTcpSocket* TcpServers::m_client;
 
+// 单例模式
+TcpServers& TcpServers::getInstance(){
+    static TcpServers instance;
+    return instance;
+}
+
 TcpServers::TcpServers() {
     Init();
     connect(m_server, &QTcpServer::newConnection, this, &TcpServers::newConnection);
@@ -26,7 +32,7 @@ void TcpServers::newConnection(){
         // 处理客户端的连接请求
         m_client = m_server->nextPendingConnection();
         // 发送数据
-        m_client->write("connect to server successfully!");
+        connect(m_client, &QTcpSocket::readyRead, this, &TcpServers::readDiffFromClient);
     }
 }
 
@@ -36,4 +42,19 @@ void TcpServers::ReadFromClient(QString& s){
         QByteArray array = m_client->readAll();
         s = array;
     });
+}
+
+void TcpServers::readDiffFromClient(){
+    QByteArray array = m_client->readAll();
+    QString s = array;
+    QString type = s.section(' ', 0, 0);
+    QString username = s.section(' ', 1, 1);
+    QString pwd = s.section(' ', 2, 2);
+    qDebug() << type << ' ' << username << ' ' << pwd;
+    QByteArray text;
+    if(username == "123" && pwd == "qwer")
+        text = "TRUE";
+    else
+        text = "FALSE";
+    m_client->write(text);
 }

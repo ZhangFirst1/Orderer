@@ -13,9 +13,8 @@ int main(int argc, char *argv[])
 
     //MainWindow w;
     //w.show();
+
     Login l;
     l.show();
-    backend b;
-    b.show();
     return a.exec();
 }

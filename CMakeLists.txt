@@ -29,6 +29,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         login.h login.cpp login.ui
         tcpclient.h tcpclient.cpp
         tcpservers.h tcpservers.cpp
+        adminlogin.h adminlogin.cpp adminlogin.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Orderer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

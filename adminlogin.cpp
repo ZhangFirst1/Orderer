@@ -1,5 +1,7 @@
 #include "adminlogin.h"
 #include "ui_adminlogin.h"
+#include "tcpservers.h"
+#include "backend.h"
 
 AdminLogin::AdminLogin(QWidget *parent)
     : QMainWindow(parent)
@@ -24,7 +26,11 @@ void AdminLogin::loginButton_click(){
     QString admin_name = ui->userEdit->text();
     QString admin_pwd = ui->pwdEdit->text();
     if(admin_name == "admin" && admin_pwd == "qwer"){
+        isAdmin = true;
+        // 初始化服务器端
+        TcpServers& instance = TcpServers::getInstance();
+        backend* back = new backend();
+        back->show();
         delete this;
-
     }
 }

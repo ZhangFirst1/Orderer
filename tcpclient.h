@@ -3,17 +3,32 @@
 
 #include <QTcpSocket>
 
-class TcpClient
+enum type{
+    LOGIN,
+};
+
+class TcpClient: public QTcpSocket
 {
+    Q_OBJECT
+
 public:
-    TcpClient();
+    static TcpClient& getInstance();
     ~TcpClient();
     void Init();
-    static void WriteToServer(const QString s);
-    static void ReadFromServer(QString& s);
+    static void WriteToServer(const QString& s,const QString& type);
+
+public slots:
+    void readFromServer();
 
 public:
     static QTcpSocket* server;
+    bool isLogin_;
+
+private:
+    // 使用单例模式设计
+    TcpClient();
+
+
 };
 
 #endif // TCPCLIENT_H

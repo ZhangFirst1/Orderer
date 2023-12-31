@@ -7,10 +7,10 @@ backend::backend(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->clientButton,&QPushButton::clicked,this,&backend::clientButton_clicked);
-    connect(ui->menuButton,&QPushButton::clicked,this,backend::menuButton_clicked);
-    connect(ui->dealButton,&QPushButton::clicked,this,backend::dealButton_clicked);
-    connect(ui->recordButton,&QPushButton::clicked,this,backend::recordButton_clicked);
-    connect(ui->closeButton,&QPushButton::clicked,this,backend::closeButton_clicked);
+    connect(ui->menuButton,&QPushButton::clicked,this,&backend::menuButton_clicked);
+    connect(ui->dealButton,&QPushButton::clicked,this,&backend::dealButton_clicked);
+    connect(ui->recordButton,&QPushButton::clicked,this,&backend::recordButton_clicked);
+    connect(ui->closeButton,&QPushButton::clicked,this,&backend::closeButton_clicked);
 }
 
 backend::~backend()

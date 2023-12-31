@@ -2,6 +2,9 @@
 #include "ui_login.h"
 #include "tcpclient.h"
 #include "adminlogin.h"
+#include "mainwindow.h"
+#include <QThread>
+
 
 Login::Login(QWidget *parent)
     : QMainWindow(parent)
@@ -18,13 +21,27 @@ Login::~Login()
 }
 
 void Login::loginButton_clicked(){
+    // 启用客户端连接
+    TcpClient& instance = TcpClient::getInstance();
+    // 判断连接并向后台发送登录请求
     if(TcpClient::server == NULL){
         qDebug() << "NULL";
     }else{
-        TcpClient::WriteToServer(ui->userEdit->text());
-        TcpClient::WriteToServer(ui->pwdEdit->text());
+        TcpClient::WriteToServer(ui->userEdit->text() + " " + ui->pwdEdit->text(), "LOGIN");
     }
 
+    // 在事件循环中等待响应
+    QEventLoop loop;
+    connect(TcpClient::server, SIGNAL(readyRead()), &loop, SLOT(quit()));
+    loop.exec();
+
+    if(instance.isLogin_ == true){
+        MainWindow* main_window = new MainWindow();
+        main_window->show();
+        this->close();
+    }else{
+        qDebug() << "error";
+    }
 }
 
 void Login::adminButton_clicked(){

@@ -4,17 +4,21 @@
 #include <QTcpServer>
 #include <QByteArray>
 
-class TcpServers: public QObject
+class TcpServers: public QTcpServer
 {
     Q_OBJECT
-public:
+private:
+    // 单例模式
     TcpServers();
+public:
+    static TcpServers& getInstance();
     ~TcpServers();
     void Init();
     static void ReadFromClient(QString& s);
 
 public slots:
     void newConnection();
+    void readDiffFromClient();
 
 private:
     static QTcpServer* m_server;

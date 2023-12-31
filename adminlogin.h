@@ -14,6 +14,8 @@ class AdminLogin : public QMainWindow
 public:
     explicit AdminLogin(QWidget *parent = nullptr);
     ~AdminLogin();
+    // 管理员是否已经登录
+    bool IsAdmin(){ return isAdmin; }
 
 private slots:
     void backButton_click();
@@ -21,6 +23,7 @@ private slots:
 
 private:
     Ui::AdminLogin *ui;
+    bool isAdmin;
 };
 
 #endif // ADMINLOGIN_H

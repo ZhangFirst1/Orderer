@@ -1,6 +1,8 @@
 #ifndef CLIENTDBVIEW_H
 #define CLIENTDBVIEW_H
 
+
+#include "dbmanager.h"
 #include <QWidget>
 #include <QSqlTableModel>
 #include <QMessageBox>
@@ -16,7 +18,8 @@ public:
     explicit clientdbview(QWidget *parent = nullptr);
     ~clientdbview();
     bool isconnect(QString const&dbName);
-    QSqlTableModel *model;
+
+
 private slots:
     void clientview_clicked();
     void clientselect_clicked();
@@ -25,6 +28,7 @@ private slots:
     void clientdelete_clicled();
 private:
     Ui::clientdbview *ui;
+    DbManager db_manager = DbManager::getDbInstance();
 };
 
 #endif // CLIENTDBVIEW_H

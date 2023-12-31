@@ -48,13 +48,20 @@ void TcpServers::readDiffFromClient(){
     QByteArray array = m_client->readAll();
     QString s = array;
     QString type = s.section(' ', 0, 0);
-    QString username = s.section(' ', 1, 1);
-    QString pwd = s.section(' ', 2, 2);
-    qDebug() << type << ' ' << username << ' ' << pwd;
-    QByteArray text;
-    if(username == "123" && pwd == "qwer")
-        text = "TRUE";
-    else
-        text = "FALSE";
-    m_client->write(text);
+    // 判断登录状态
+    if(type == "LOGIN"){
+        QString username = s.section(' ', 1, 1);
+        QString pwd = s.section(' ', 2, 2);
+        qDebug() << type << ' ' << username << ' ' << pwd;
+        QByteArray text;
+
+        if(username == "123" && pwd == "qwer"){
+            text = "TRUE";
+        }
+        else{
+            text = "FALSE";
+        }
+        m_client->write(text);
+    }
+
 }

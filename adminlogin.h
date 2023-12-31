@@ -2,7 +2,7 @@
 #define ADMINLOGIN_H
 
 #include <QMainWindow>
-
+#include <QSqlDatabase>
 namespace Ui {
 class AdminLogin;
 }

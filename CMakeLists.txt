@@ -37,6 +37,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         clientdbview.h clientdbview.cpp clientdbview.ui
         dbmanager.h dbmanager.cpp
+        myorder.h myorder.cpp myorder.ui
 
 
 

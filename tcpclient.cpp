@@ -15,6 +15,9 @@ TcpClient::TcpClient() {
 
 // RAII
 TcpClient::~TcpClient(){
+    if(server){
+        server->disconnectFromHost();
+    }
     delete server;
 }
 

@@ -3,6 +3,17 @@
 
 #include <QMainWindow>
 #include <QSqlDatabase>
+#include <QGridLayout>
+#include <QLineEdit>
+#include <QValidator>
+#include <Qt>
+
+struct MyItems{
+    QString name;
+    int num;
+    double price;
+};
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -17,7 +28,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    QWidget* createRowWidget(const QString &labelText1, const double &labelText2, const int &labelText3, const QString &buttonText);
+
+private slots:
+    void myOrderButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+    int order_num_;
+    MyItems item_[50];
 };
 #endif // MAINWINDOW_H

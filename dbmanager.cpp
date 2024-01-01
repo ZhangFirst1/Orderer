@@ -57,6 +57,7 @@ void DbManager::updateClient(){
 }
 // 验证用户登录
 bool DbManager::verifyUser(const QString& name, const QString& pwd){
+    model->setTable("client");
     model->setFilter(QString("account = '%1' AND passwd = '%2'").arg(name, pwd));
     model->select();
 

@@ -1,4 +1,5 @@
 #include "tcpservers.h"
+#include "dbmanager.h"
 
 
 QTcpServer* TcpServers::m_server;
@@ -13,7 +14,8 @@ TcpServers& TcpServers::getInstance(){
 TcpServers::TcpServers() {
     Init();
     connect(m_server, &QTcpServer::newConnection, this, &TcpServers::newConnection);
-    //newConnection();
+    //if(!m_client)
+    //    connect(m_client, &QTcpSocket::disconnected, this, &TcpServers::handleDisconnect);
 }
 
 TcpServers::~TcpServers() {
@@ -36,6 +38,12 @@ void TcpServers::newConnection(){
     }
 }
 
+void TcpServers::handleDisconnect(){
+    m_client->disconnectFromHost();
+    m_client->close();
+    m_client = NULL;
+}
+
 void TcpServers::ReadFromClient(QString& s){
     connect(m_client, &QTcpSocket::readyRead, [&](){
         // 接受数据
@@ -45,6 +53,7 @@ void TcpServers::ReadFromClient(QString& s){
 }
 
 void TcpServers::readDiffFromClient(){
+    DbManager db_manager = DbManager::getDbInstance();
     QByteArray array = m_client->readAll();
     QString s = array;
     QString type = s.section(' ', 0, 0);
@@ -52,10 +61,11 @@ void TcpServers::readDiffFromClient(){
     if(type == "LOGIN"){
         QString username = s.section(' ', 1, 1);
         QString pwd = s.section(' ', 2, 2);
-        qDebug() << type << ' ' << username << ' ' << pwd;
         QByteArray text;
+        qDebug() << username;
+        qDebug() << pwd;
 
-        if(username == "123" && pwd == "qwer"){
+        if(db_manager.verifyUser(username, pwd)){
             text = "TRUE";
         }
         else{

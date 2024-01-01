@@ -9,7 +9,6 @@ backend::backend(QWidget *parent)
     , ui(new Ui::backend)
 {
     ui->setupUi(this);
-    DbManager db_manager = DbManager::getDbInstance();
     connect(ui->clientButton,&QPushButton::clicked,this,&backend::clientButton_clicked);
     connect(ui->menuButton,&QPushButton::clicked,this,&backend::menuButton_clicked);
     connect(ui->dealButton,&QPushButton::clicked,this,&backend::dealButton_clicked);

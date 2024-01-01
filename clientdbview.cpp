@@ -12,7 +12,7 @@ clientdbview::clientdbview(QWidget *parent)
     connect(ui->addButton,&QPushButton::clicked,this,&clientdbview::clientadd_clicked);
     connect(ui->updateButton,&QPushButton::clicked,this,&clientdbview::clientupdate_clicked);
     connect(ui->deleteButton,&QPushButton::clicked,this,&clientdbview::clientdelete_clicled);
-
+    db_manager.getClientAll();
     ui->tableView->setModel(db_manager.model);
 }
 

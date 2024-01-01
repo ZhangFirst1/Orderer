@@ -14,6 +14,7 @@ DbManager::DbManager() {
 void DbManager::Init(){
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("mydb.db");
+
     if(!db.open())
     {
         qDebug() << "fail to connect to root SQLite";
@@ -54,4 +55,15 @@ void DbManager::updateClient(){
         model->database().rollback();//回滚
     }
 }
+// 验证用户登录
+bool DbManager::verifyUser(const QString& name, const QString& pwd){
+    model->setFilter(QString("account = '%1' AND passwd = '%2'").arg(name, pwd));
+    model->select();
 
+    if (model->rowCount() > 0) {
+        return true;
+    } else {
+        qDebug() << "verifyUser error";
+        return false;
+    }
+}

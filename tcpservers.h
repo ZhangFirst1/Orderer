@@ -1,10 +1,12 @@
 #ifndef TCPSERVERS_H
 #define TCPSERVERS_H
+
 #include <QTcpSocket>
 #include <QTcpServer>
 #include <QByteArray>
 
-class TcpServers: public QTcpServer
+
+class TcpServers: public QObject
 {
     Q_OBJECT
 private:
@@ -19,6 +21,7 @@ public:
 public slots:
     void newConnection();
     void readDiffFromClient();
+    void handleDisconnect();
 
 private:
     static QTcpServer* m_server;

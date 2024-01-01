@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.5)
 project(Orderer VERSION 0.1 LANGUAGES CXX)
 
 
-
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -38,13 +37,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         clientdbview.h clientdbview.cpp clientdbview.ui
         dbmanager.h dbmanager.cpp
         myorder.h myorder.cpp myorder.ui
-
-
-
-
-
-
-
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Orderer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

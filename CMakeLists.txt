@@ -38,6 +38,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         dbmanager.h dbmanager.cpp
         myorder.h myorder.cpp myorder.ui
         menu.h menu.cpp menu.ui
+        dealorder.h dealorder.cpp dealorder.ui
+        orderdetails.h orderdetails.cpp orderdetails.ui
 
     )
 # Define target properties for Android with Qt 6 as:

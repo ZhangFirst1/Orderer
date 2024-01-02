@@ -3,6 +3,7 @@
 #include "clientdbview.h"
 #include "dbmanager.h"
 #include "menu.h"
+#include "dealorder.h"
 
 backend::backend(QWidget *parent)
     : QWidget(parent)
@@ -22,19 +23,25 @@ backend::~backend()
 }
 void backend::clientButton_clicked()
 {
-    clientdbview* client_db = new clientdbview();
-    client_db->show();
     this->hide();
+    clientdbview* client_db = new clientdbview(this);
+    client_db->setWindowFlag(Qt::Window);
+    client_db->show();
+
 }
 void backend::menuButton_clicked()
 {
-    menu * menu_db=new menu();
+    this->hide();
+    menu * menu_db=new menu(this);
+    menu_db->setWindowFlag(Qt::Window);
     menu_db->show();
-    this->close();
+
 }
 void backend::dealButton_clicked()
 {
-
+    dealorder *dorder=new dealorder();
+    dorder->show();
+    this->close();
 }
 void backend::recordButton_clicked()
 {

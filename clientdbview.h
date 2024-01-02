@@ -28,6 +28,8 @@ private slots:
     void clientdelete_clicled();
     void on_returnButton_clicked();
 
+    void on_updateButton_clicked();
+
 private:
     Ui::clientdbview *ui;
     DbManager db_manager = DbManager::getDbInstance();

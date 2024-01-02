@@ -69,12 +69,12 @@ void DbManager::deleteMenu(int row)
 }
 // 查询菜品
 void DbManager::queryMenu(QString menuname){
-    model->setFilter(QString("account='%1'").arg(menuname));
+    model->setFilter(QString("dishname='%1'").arg(menuname));
     model->select();
 }
 // 查询所有菜品
 void DbManager::getMenuAll(){
-    model->setTable("menu");
+    model->setTable("menus");
     model->select();
 }
 //更新菜品
@@ -104,3 +104,10 @@ bool DbManager::verifyUser(const QString& name, const QString& pwd){
         return false;
     }
 }
+
+// 查询用户订单详情
+// void DbManager::getOrderdetailsAll(){
+//     model->setTable("orderdetails");
+//     model->select();
+// }
+

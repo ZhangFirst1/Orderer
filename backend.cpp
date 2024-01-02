@@ -22,7 +22,7 @@ backend::~backend()
 }
 void backend::clientButton_clicked()
 {
-    clientdbview* client_db = new clientdbview();
+    clientdbview* client_db = new clientdbview(this);
     client_db->show();
     this->hide();
 }

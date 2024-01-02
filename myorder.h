@@ -5,6 +5,7 @@
 #include <QLayout>
 #include <QMainWindow>
 #include <QLabel>
+#include <QMessageBox>
 
 struct items{
     QString name;
@@ -28,12 +29,13 @@ public:
     int& getTotalNum() { return total_num_; }
     void creatItem();
 
-private:
+private slots:
     void backButton_clicked();
-    int total_num_ = 0;
-    items item_[50];
+    void myOrderButton_clicked();
 
 private:
+    int total_num_ = 0;
+    items item_[50];
     Ui::MyOrder *ui;
 
 };

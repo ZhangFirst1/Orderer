@@ -24,8 +24,9 @@ MyOrder::MyOrder(QWidget *parent)
     , ui(new Ui::MyOrder)
 {
     ui->setupUi(this);
-
+    memset(item_, 0, sizeof item_);
     connect(ui->backButton, &QPushButton::clicked, this, &MyOrder::backButton_clicked);
+    connect(ui->orderButton, &QPushButton::clicked, this, &MyOrder::myOrderButton_clicked);
 }
 
 MyOrder::~MyOrder()
@@ -40,7 +41,7 @@ void MyOrder::backButton_clicked(){
 
 void MyOrder::creatItem(){
     QVBoxLayout *scrollLayout = new QVBoxLayout();
-    memset(item_, 0, sizeof item_);
+
     double total = 0.0;
     for(int i=0; i < total_num_; i++){
         QWidget* rowWidge1 = createRowWidget(item_[i].name, QString::number(item_[i].num), QString::number(item_[i].price));
@@ -49,4 +50,11 @@ void MyOrder::creatItem(){
     }
     ui->scrollArea->widget()->setLayout(scrollLayout);
     ui->label_total_price->setText(QString::number(total)+"元");
+}
+
+void MyOrder::myOrderButton_clicked(){
+    QMessageBox msgBox;
+    msgBox.setText("您确定要下单吗");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.exec();
 }

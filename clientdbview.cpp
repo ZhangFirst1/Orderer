@@ -11,7 +11,8 @@ clientdbview::clientdbview(QWidget *parent)
     connect(ui->selectButon,&QPushButton::clicked,this,&clientdbview::clientselect_clicked);
     connect(ui->addButton,&QPushButton::clicked,this,&clientdbview::clientadd_clicked);
     connect(ui->updateButton,&QPushButton::clicked,this,&clientdbview::clientupdate_clicked);
-    connect(ui->deleteButton,&QPushButton::clicked,this,&clientdbview::clientdelete_clicled);
+    connect(ui->deleteButton,&QPushButton::clicked,this,&clientdbview::clientdelete_clicked);
+    connect(ui->backButton, &QPushButton::clicked, this, &clientdbview::client_back_clicked);
     db_manager.getClientAll();
     ui->tableView->setModel(db_manager.model);
 }
@@ -41,7 +42,7 @@ void clientdbview::clientupdate_clicked()
 {
     db_manager.updateClient();
 }
-void clientdbview::clientdelete_clicled()
+void clientdbview::clientdelete_clicked()
 {
     //获取选择的行
     int curRow = ui->tableView->currentIndex().row();
@@ -57,4 +58,9 @@ void clientdbview::clientdelete_clicled()
     {
         db_manager.model->submitAll();
     }
+}
+
+void clientdbview::client_back_clicked(){
+    this->close();
+    parentWidget()->show();
 }

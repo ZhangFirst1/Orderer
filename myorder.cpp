@@ -40,6 +40,7 @@ void MyOrder::backButton_clicked(){
 
 void MyOrder::creatItem(){
     QVBoxLayout *scrollLayout = new QVBoxLayout();
+    memset(item_, 0, sizeof item_);
     double total = 0.0;
     for(int i=0; i < total_num_; i++){
         QWidget* rowWidge1 = createRowWidget(item_[i].name, QString::number(item_[i].num), QString::number(item_[i].price));

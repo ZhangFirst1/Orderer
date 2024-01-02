@@ -79,5 +79,11 @@ void TcpServers::readDiffFromClient(){
 }
 
 void TcpServers::sendMenuToClient(){
-    db_manager.getMenuAll();
+    QString content = db_manager.getMenuToClient();
+    QByteArray text = "MENU " + content.toUtf8();
+    if(content == "NULL"){
+        m_client->write("NULL");
+    }else{
+        m_client->write(text);
+    }
 }

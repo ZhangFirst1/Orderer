@@ -107,5 +107,23 @@ bool DbManager::verifyUser(const QString& name, const QString& pwd){
 
 //将菜单发送给客户端
 QString DbManager::getMenuToClient(){
+    model->setTable("menu");
+    model->select();
+    // 获取所有行
+    int rowCount = model->rowCount();
+    int colCount = model->columnCount();
 
+    QString result;
+    result += QString::number(rowCount) + "@";
+    for(int i=0; i < rowCount; i++){
+        QSqlRecord record = model->record(i);
+        for(int j=0; j < colCount; j++){
+            result += record.value(j).toString() + "#";
+        }
+        result += "$";
+    }
+    if(rowCount == 0){
+        return "NULL";
+    }
+    return result;
 }

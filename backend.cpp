@@ -22,13 +22,15 @@ backend::~backend()
 void backend::clientButton_clicked()
 {
     this->hide();
-    clientdbview* client_db = new clientdbview();
+    clientdbview* client_db = new clientdbview(this);
+    client_db->setWindowFlag(Qt::Window);
     client_db->show();
 }
 void backend::menuButton_clicked()
 {
     this->hide();
-    menu * menu_db=new menu();
+    menu * menu_db=new menu(this);
+    menu_db->setWindowFlag(Qt::Window);
     menu_db->show();
 }
 void backend::dealButton_clicked()

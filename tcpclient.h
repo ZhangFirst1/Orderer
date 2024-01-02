@@ -26,12 +26,12 @@ public slots:
 public:
     static QTcpSocket* server;
     bool isLogin_;
-    void getMenuFromServer(const QString& content);
+    QString getMenuFromServer();
 
 private:
     // 使用单例模式设计
     TcpClient();
-
+    QString menu;
 
 };
 

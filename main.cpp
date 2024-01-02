@@ -13,10 +13,9 @@ int main(int argc, char *argv[])
 
     //MainWindow w;
     //w.show();
-    //Login l;
-    //l.show();
-    backend back;
-    back.show();
+    Login l;
+    l.show();
+
     // QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     // db.setDatabaseName("mydb.db");
     // if(!db.open())

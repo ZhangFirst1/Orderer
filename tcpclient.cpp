@@ -54,15 +54,14 @@ void TcpClient::readFromServer(){
     QString type = s.section(" ", 0, 0);
     QString content = s.section(" ", 1, 1);
     qDebug() << "readFromServer:" << s;
-    if(s == "TRUE"){
+    if(type == "TRUE"){
         isLogin_ = true;
-    }else if(s == "MENU"){
-        getMenuFromServer(content);
+    }else if(type == "MENU"){
+        menu = content;
     }
 }
 
-void TcpClient::getMenuFromServer(const QString& content){
-    qDebug() << content;
-
+QString TcpClient::getMenuFromServer(){
+    return menu;
 }
 

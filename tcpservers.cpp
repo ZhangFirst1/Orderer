@@ -57,6 +57,7 @@ void TcpServers::readDiffFromClient(){
     QByteArray array = m_client->readAll();
     QString s = array;
     QString type = s.section(' ', 0, 0);
+    QString content = s.section(' ', 1, 1);
     // 判断登录状态
     if(type == "LOGIN"){
         QString username = s.section(' ', 1, 1);
@@ -66,12 +67,23 @@ void TcpServers::readDiffFromClient(){
         qDebug() << pwd;
 
         if(db_manager.verifyUser(username, pwd)){
-            text = "TRUE";
+            text = "TRUE ";
         }
         else{
-            text = "FALSE";
+            text = "FALSE ";
         }
         m_client->write(text);
+    }else if(type == "MENU"){
+        sendMenuToClient();
     }
+}
 
+void TcpServers::sendMenuToClient(){
+    QString content = db_manager.getMenuToClient();
+    QByteArray text = "MENU " + content.toUtf8();
+    if(content == "NULL"){
+        m_client->write("NULL");
+    }else{
+        m_client->write(text);
+    }
 }

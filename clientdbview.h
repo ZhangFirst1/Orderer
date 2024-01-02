@@ -17,6 +17,7 @@ class clientdbview : public QWidget
 public:
     explicit clientdbview(QWidget *parent = nullptr);
     ~clientdbview();
+
     bool isconnect(QString const&dbName);
 
 
@@ -25,8 +26,8 @@ private slots:
     void clientselect_clicked();
     void clientadd_clicked();
     void clientupdate_clicked();
-    void clientdelete_clicled();
-    void on_returnButton_clicked();
+    void clientdelete_clicked();
+    void client_back_clicked();
 
     void on_updateButton_clicked();
 

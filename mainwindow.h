@@ -5,6 +5,7 @@
 #include <QSqlDatabase>
 #include <QGridLayout>
 #include <QLineEdit>
+#include <QString>
 #include <QValidator>
 #include <Qt>
 

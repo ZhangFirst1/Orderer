@@ -5,6 +5,8 @@
 #include <QSqlTableModel>
 #include <QDebug>
 #include <QSqlQuery>
+#include <QSqlRecord>
+
 
 class DbManager
 {
@@ -23,6 +25,8 @@ public:
     void addMenu(int row);
     void updateMenu();
     void deleteMenu(int row);
+    // 菜单发送给客户端
+    QString getMenuToClient();
     // 登录验证
     bool verifyUser(const QString& name, const QString& pwd);
 

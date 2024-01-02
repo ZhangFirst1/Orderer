@@ -1,7 +1,6 @@
 #include "backend.h"
 #include "ui_backend.h"
 #include "clientdbview.h"
-#include "dbmanager.h"
 #include "menu.h"
 #include "dealorder.h"
 
@@ -27,7 +26,6 @@ void backend::clientButton_clicked()
     clientdbview* client_db = new clientdbview(this);
     client_db->setWindowFlag(Qt::Window);
     client_db->show();
-
 }
 void backend::menuButton_clicked()
 {
@@ -35,7 +33,6 @@ void backend::menuButton_clicked()
     menu * menu_db=new menu(this);
     menu_db->setWindowFlag(Qt::Window);
     menu_db->show();
-
 }
 void backend::dealButton_clicked()
 {

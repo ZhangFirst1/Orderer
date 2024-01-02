@@ -3,9 +3,11 @@
 
 #include <QTcpSocket>
 
-enum type{
-    LOGIN,
-};
+// struct MyItems{
+//     QString name;
+//     int num;
+//     double price;
+// };
 
 class TcpClient: public QTcpSocket
 {
@@ -16,6 +18,7 @@ public:
     ~TcpClient();
     void Init();
     static void WriteToServer(const QString& s,const QString& type);
+    static void WriteToServer(const QString& type);
 
 public slots:
     void readFromServer();
@@ -23,11 +26,12 @@ public slots:
 public:
     static QTcpSocket* server;
     bool isLogin_;
+    QString getMenuFromServer();
 
 private:
     // 使用单例模式设计
     TcpClient();
-
+    QString menu;
 
 };
 

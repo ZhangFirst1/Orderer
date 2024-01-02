@@ -18,9 +18,8 @@ menu::~menu()
 
 void menu::on_menureturnButton_clicked()
 {
-    backend * back=new backend;
-    back->show();
-    delete this;
+    this->close();
+    parentWidget()->show();
 }
 
 void menu::on_menushowButton_clicked()

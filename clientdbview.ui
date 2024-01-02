@@ -124,7 +124,7 @@
     <string>查询</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="returnButton">
+  <widget class="QPushButton" name="backButton">
    <property name="geometry">
     <rect>
      <x>490</x>

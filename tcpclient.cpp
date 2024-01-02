@@ -43,12 +43,25 @@ void TcpClient::WriteToServer(const QString& s,const QString& type){
     server->write(s.toUtf8());
 }
 
+void TcpClient::WriteToServer(const QString& type){
+    // 发送数据
+    server->write((type+" ").toUtf8());
+}
+
 void TcpClient::readFromServer(){
     QByteArray data = server->readAll();
     QString s = data;
+    QString type = s.section(" ", 0, 0);
+    QString content = s.section(" ", 1, 1);
     qDebug() << "readFromServer:" << s;
-    if(s == "TRUE"){
+    if(type == "TRUE"){
         isLogin_ = true;
+    }else if(type == "MENU"){
+        menu = content;
     }
+}
+
+QString TcpClient::getMenuFromServer(){
+    return menu;
 }
 

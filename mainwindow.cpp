@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "myorder.h"
+#include "tcpclient.h"
 
 
 // 创建一行信息
@@ -21,7 +22,6 @@ QWidget* MainWindow::createRowWidget(const QString &labelText1, const double &la
     le->setText("1");
     // 下单按钮
     QPushButton *button = new QPushButton(buttonText);
-    button->setText("下单");
     connect(button, &QPushButton::clicked, this, [=](){
         bool flag = false;
         for(int i=0;i<order_num_;i++){
@@ -59,8 +59,33 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     QVBoxLayout *scrollLayout = new QVBoxLayout();
-    for(int i=1;i<20;i++){
-        QWidget* rowWidge1 = createRowWidget("Label " + QString::number(i), 10.0 , 6, "Button " + QString::number(1));
+    // 从后端获取数据
+    TcpClient& instance = TcpClient::getInstance();
+    if(TcpClient::server == NULL){
+        qDebug() << "NULL";
+    }else{
+        TcpClient::WriteToServer("MENU");
+    }
+    // 在事件循环中等待响应
+    QEventLoop loop;
+    connect(TcpClient::server, SIGNAL(readyRead()), &loop, SLOT(quit()));
+    loop.exec();
+
+    QString menu = instance.getMenuFromServer();
+    qDebug() << "接收" << menu;
+    QString cnt_string = menu.section("@", 0, 0);
+    int cnt = cnt_string.toInt();
+    menu.remove(0, cnt_string.size()+1);
+
+    for(int i=0;i<cnt;i++){
+        // 菜名 价格 库存
+        QString row_now = menu.section("$", i, i);
+        QString dish_name = row_now.section("#", 0, 0);
+        double price = row_now.section("#", 1, 1).toDouble();
+        int store = row_now.section("#", 2, 2).toInt();
+        qDebug() << "分割后" << dish_name << ' ' << price << " " << store;
+
+        QWidget* rowWidge1 = createRowWidget(dish_name, price , store, "下单");
         scrollLayout->addWidget(rowWidge1);
     }
     ui->scrollArea->widget()->setLayout(scrollLayout);

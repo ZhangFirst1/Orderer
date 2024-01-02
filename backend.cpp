@@ -2,7 +2,7 @@
 #include "ui_backend.h"
 #include "clientdbview.h"
 #include "dbmanager.h"
-
+#include "menu.h"
 
 backend::backend(QWidget *parent)
     : QWidget(parent)
@@ -28,7 +28,9 @@ void backend::clientButton_clicked()
 }
 void backend::menuButton_clicked()
 {
-
+    menu * menu_db=new menu();
+    menu_db->show();
+    this->close();
 }
 void backend::dealButton_clicked()
 {

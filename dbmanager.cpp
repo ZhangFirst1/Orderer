@@ -13,7 +13,8 @@ DbManager::DbManager() {
 
 void DbManager::Init(){
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("mydb.db");
+    db.setDatabaseName("./sqlite/users.db");
+    //db.setDatabaseName("mydb.db");
 
     if(!db.open())
     {
@@ -55,6 +56,41 @@ void DbManager::updateClient(){
         model->database().rollback();//回滚
     }
 }
+
+//增加菜品
+void DbManager::addMenu(int row)
+{
+    model->insertRow(row);
+}
+// 删除菜品
+void DbManager::deleteMenu(int row)
+{
+    model->removeRow(row);
+}
+// 查询菜品
+void DbManager::queryMenu(QString menuname){
+    model->setFilter(QString("account='%1'").arg(menuname));
+    model->select();
+}
+// 查询所有菜品
+void DbManager::getMenuAll(){
+    model->setTable("menu");
+    model->select();
+}
+//更新菜品
+void DbManager::updateMenu(){
+    //开始事务操作
+    model->database().transaction();
+    if(model->submitAll())
+    {
+        model->database().commit();
+    }
+    else
+    {
+        model->database().rollback();//回滚
+    }
+}
+
 // 验证用户登录
 bool DbManager::verifyUser(const QString& name, const QString& pwd){
     model->setFilter(QString("account = '%1' AND passwd = '%2'").arg(name, pwd));

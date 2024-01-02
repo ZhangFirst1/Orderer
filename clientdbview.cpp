@@ -1,6 +1,6 @@
 #include "clientdbview.h"
 #include "ui_clientdbview.h"
-
+#include "backend.h"
 
 clientdbview::clientdbview(QWidget *parent)
     : QWidget(parent)
@@ -57,4 +57,11 @@ void clientdbview::clientdelete_clicled()
     {
         db_manager.model->submitAll();
     }
+}
+
+void clientdbview::on_returnButton_clicked()
+{
+    backend * back=new backend;
+    back->show();
+    delete this;
 }

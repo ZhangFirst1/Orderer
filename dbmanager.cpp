@@ -13,8 +13,8 @@ DbManager::DbManager() {
 
 void DbManager::Init(){
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    //db.setDatabaseName("./sqlite/users.db");
-    db.setDatabaseName("mydb.db");
+    db.setDatabaseName("./sqlite/users.db");
+    //db.setDatabaseName("mydb.db");
 
     if(!db.open())
     {

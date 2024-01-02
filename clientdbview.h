@@ -29,7 +29,7 @@ private slots:
     void clientdelete_clicked();
     void client_back_clicked();
 
-    void on_updateButton_clicked();
+    //void on_updateButton_clicked();
 
 private:
     Ui::clientdbview *ui;

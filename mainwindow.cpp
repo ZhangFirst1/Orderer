@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "myorder.h"
+#include "tcpclient.h"
 
 
 // 创建一行信息
@@ -59,7 +60,22 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     QVBoxLayout *scrollLayout = new QVBoxLayout();
-    for(int i=1;i<20;i++){
+    // 从后端获取数据
+    TcpClient& instance = TcpClient::getInstance();
+    if(TcpClient::server == NULL){
+        qDebug() << "NULL";
+    }else{
+        TcpClient::WriteToServer("MENU");
+    }
+    // 在事件循环中等待响应
+    QEventLoop loop;
+    connect(TcpClient::server, SIGNAL(readyRead()), &loop, SLOT(quit()));
+    loop.exec();
+    // 菜名 价格 库存
+    int cnt = 0;
+
+
+    for(int i=0;i<20;i++){
         QWidget* rowWidge1 = createRowWidget("Label " + QString::number(i), 10.0 , 6, "Button " + QString::number(1));
         scrollLayout->addWidget(rowWidge1);
     }

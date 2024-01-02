@@ -29,8 +29,8 @@ void AdminLogin::loginButton_click(){
     if(admin_name == "admin" && admin_pwd == "qwer"){
         isAdmin = true;
         // 初始化服务器端与数据库
-        TcpServers& instance = TcpServers::getInstance();
         DbManager& db_manager = DbManager::getDbInstance();
+        TcpServers& instance = TcpServers::getInstance();
         backend* back = new backend();
         back->show();
         delete this;

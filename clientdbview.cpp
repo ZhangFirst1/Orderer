@@ -1,6 +1,6 @@
 #include "clientdbview.h"
 #include "ui_clientdbview.h"
-
+#include "backend.h"
 
 clientdbview::clientdbview(QWidget *parent)
     : QWidget(parent)
@@ -60,7 +60,14 @@ void clientdbview::clientdelete_clicked()
     }
 }
 
+
 void clientdbview::client_back_clicked(){
-    this->close();
+    this->hide();
     parentWidget()->show();
 }
+// void clientdbview::on_returnButton_clicked()
+// {
+//     backend * back=new backend;
+//     back->show();
+//     delete this;
+// }

@@ -37,6 +37,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         clientdbview.h clientdbview.cpp clientdbview.ui
         dbmanager.h dbmanager.cpp
         myorder.h myorder.cpp myorder.ui
+        menu.h menu.cpp menu.ui
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Orderer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

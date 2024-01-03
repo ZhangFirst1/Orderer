@@ -57,14 +57,13 @@ void TcpServers::readDiffFromClient(){
     QByteArray array = m_client->readAll();
     QString s = array;
     QString type = s.section(' ', 0, 0);
-    QString content = s.section(' ', 1, 1);
+    QString content = s.section(' ', 1);
+    qDebug() << "Receive From Client:" << s;
     // 判断登录状态
     if(type == "LOGIN"){
         QString username = s.section(' ', 1, 1);
         QString pwd = s.section(' ', 2, 2);
         QByteArray text;
-        qDebug() << username;
-        qDebug() << pwd;
 
         if(db_manager.verifyUser(username, pwd)){
             text = "TRUE ";
@@ -75,6 +74,10 @@ void TcpServers::readDiffFromClient(){
         m_client->write(text);
     }else if(type == "MENU"){
         sendMenuToClient();
+    }else if(type == "ORDER"){
+        handleOrder(content);
+    }else{
+        qDebug() << "暂未实现";
     }
 }
 
@@ -85,5 +88,33 @@ void TcpServers::sendMenuToClient(){
         m_client->write("NULL");
     }else{
         m_client->write(text);
+    }
+}
+
+void TcpServers::handleOrder(QString& content){
+    qDebug() << "handleOrder" << content;
+    memset(order_items_, 0, sizeof order_items_);
+    QString cnt_string = content.section("@", 0, 0);
+    QString user_name = content.section("@", 1, 1);
+    QString date = content.section("@", 2, 2);
+    int cnt = cnt_string.toInt();
+    order_items_[total_order_].order_num = cnt;
+    content.remove(0, cnt_string.size()+user_name.size()+date.size()+3);
+    qDebug() << "After remove:" << content;
+    // 处理分割后的信息
+    for(int i=0; i < cnt; i++){
+        // 菜名 价格 库存
+        QString row_now = content.section("$", i, i);
+        QString dish_name = row_now.section("#", 0, 0);
+        double price = row_now.section("#", 1, 1).toDouble();
+        int store = row_now.section("#", 2, 2).toInt();
+        // db_manager.handleOrder(dish_name, store);
+        qDebug() << "Servers分割后" << dish_name << ' ' << price << " " << store;
+        order_items_[total_order_].order[i].name = dish_name;
+        order_items_[total_order_].order[i].price = price;
+        order_items_[total_order_].order[i].store = store;
+        order_items_[total_order_].date = date;
+        order_items_[total_order_].user_name = user_name;
+        total_order_++;
     }
 }

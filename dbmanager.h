@@ -8,6 +8,7 @@
 #include <QSqlRecord>
 
 
+
 class DbManager
 {
 public:
@@ -19,7 +20,7 @@ public:
     void addClient(int row);
     void updateClient();
     void deleteClient(int row);
-    //菜单修改
+    // 菜单修改
     void getMenuAll();
     void queryMenu(QString menuname);
     void addMenu(int row);
@@ -29,11 +30,13 @@ public:
     QString getMenuToClient();
     // 登录验证
     bool verifyUser(const QString& name, const QString& pwd);
-
-    //显示订单详情
-    void getQrderdetailsAll();
+    // 显示订单详情
+    void getQrderdetailsAll();  
+    // 做菜后修改菜品库存
+    void handleOrder(QString name, int num);
 
     QSqlTableModel *model;
+    QSqlQuery *query;
 private:
     DbManager();
 };

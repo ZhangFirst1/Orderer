@@ -13,8 +13,8 @@ DbManager::DbManager() {
 
 void DbManager::Init(){
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("./sqlite/users.db");
-    //db.setDatabaseName("mydb.db");
+    //db.setDatabaseName("./sqlite/users.db");
+    db.setDatabaseName("mydb.db");
 
     if(!db.open())
     {
@@ -127,4 +127,12 @@ QString DbManager::getMenuToClient(){
         return "NULL";
     }
     return result;
+}
+
+// 做菜后修改菜品库存
+void DbManager::handleOrder(QString name, int num){
+    query->prepare("UPDATE dishes SET store = quantity - :quantityToDecrease WHERE dishname = :dishName");
+    query->bindValue(":quantityToDecrease", num);
+    query->bindValue(":dishName", name);
+    query->exec();
 }

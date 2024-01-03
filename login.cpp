@@ -5,6 +5,7 @@
 #include "mainwindow.h"
 #include <QThread>
 
+QString TcpClient::name;
 
 Login::Login(QWidget *parent)
     : QMainWindow(parent)
@@ -36,6 +37,7 @@ void Login::loginButton_clicked(){
     loop.exec();
 
     if(instance.isLogin_ == true){
+        TcpClient::name = ui->userEdit->text();
         MainWindow* main_window = new MainWindow();
         main_window->show();
         this->close();

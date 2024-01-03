@@ -3,11 +3,6 @@
 
 #include <QTcpSocket>
 
-// struct MyItems{
-//     QString name;
-//     int num;
-//     double price;
-// };
 
 class TcpClient: public QTcpSocket
 {
@@ -19,14 +14,15 @@ public:
     void Init();
     static void WriteToServer(const QString& s,const QString& type);
     static void WriteToServer(const QString& type);
+    static QTcpSocket* server;
+    bool isLogin_;
+    QString getMenuFromServer();
 
 public slots:
     void readFromServer();
 
 public:
-    static QTcpSocket* server;
-    bool isLogin_;
-    QString getMenuFromServer();
+    static QString name;
 
 private:
     // 使用单例模式设计

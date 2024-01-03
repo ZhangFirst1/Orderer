@@ -58,6 +58,8 @@ void TcpClient::readFromServer(){
         isLogin_ = true;
     }else if(type == "MENU"){
         menu = content;
+    }else if(type == "ORDER_DONE"){
+
     }
 }
 

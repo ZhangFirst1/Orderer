@@ -24,6 +24,7 @@ QWidget* MainWindow::createRowWidget(const QString &labelText1, const double &la
     QPushButton *button = new QPushButton(buttonText);
     connect(button, &QPushButton::clicked, this, [=](){
         bool flag = false;
+        qDebug() << order_num_;
         for(int i=0;i<order_num_;i++){
             if(item_[i].name == labelText1){
                 this->item_[i].num += le->text().toInt();
@@ -58,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    order_num_ = 0;
     QVBoxLayout *scrollLayout = new QVBoxLayout();
     // 从后端获取数据
     TcpClient& instance = TcpClient::getInstance();
@@ -72,7 +74,6 @@ MainWindow::MainWindow(QWidget *parent)
     loop.exec();
 
     QString menu = instance.getMenuFromServer();
-    qDebug() << "接收" << menu;
     QString cnt_string = menu.section("@", 0, 0);
     int cnt = cnt_string.toInt();
     menu.remove(0, cnt_string.size()+1);

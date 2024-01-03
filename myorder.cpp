@@ -1,5 +1,8 @@
+
 #include "myorder.h"
 #include "ui_myorder.h"
+#include "tcpclient.h"
+
 
 // 创建一行信息
 QWidget *createRowWidget(const QString &labelText1, const QString &labelText2, const QString &labelText3)
@@ -57,4 +60,12 @@ void MyOrder::myOrderButton_clicked(){
     msgBox.setText("您确定要下单吗");
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.exec();
+    QString order;
+    QDateTime dateTime= QDateTime::currentDateTime();
+    order += QString::number(total_num_) + "@" + TcpClient::name + "@" + dateTime.toString() + "@";
+    for(int i=0; i<total_num_; i++){
+        order += item_[i].name + "#" + QString::number(item_[i].price) + "#" + QString::number(item_[i].num) + "$";
+    }
+    qDebug() << order;
+    TcpClient::WriteToServer(order, "ORDER");
 }

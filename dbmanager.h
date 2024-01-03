@@ -30,6 +30,9 @@ public:
     // 登录验证
     bool verifyUser(const QString& name, const QString& pwd);
 
+    //显示订单详情
+    void getQrderdetailsAll();
+
     QSqlTableModel *model;
 private:
     DbManager();

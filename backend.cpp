@@ -2,6 +2,7 @@
 #include "ui_backend.h"
 #include "clientdbview.h"
 #include "menu.h"
+#include "dealorder.h"
 
 backend::backend(QWidget *parent)
     : QWidget(parent)
@@ -35,7 +36,9 @@ void backend::menuButton_clicked()
 }
 void backend::dealButton_clicked()
 {
-
+    dealorder *dorder=new dealorder();
+    dorder->show();
+    this->close();
 }
 void backend::recordButton_clicked()
 {

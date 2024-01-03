@@ -65,9 +65,4 @@ void clientdbview::client_back_clicked(){
     this->hide();
     parentWidget()->show();
 }
-// void clientdbview::on_returnButton_clicked()
-// {
-//     backend * back=new backend;
-//     back->show();
-//     delete this;
-// }
+

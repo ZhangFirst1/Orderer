@@ -13,8 +13,8 @@ DbManager::DbManager() {
 
 void DbManager::Init(){
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    //db.setDatabaseName("./sqlite/users.db");
-    db.setDatabaseName("mydb.db");
+    db.setDatabaseName("./sqlite/users.db");
+    //db.setDatabaseName("mydb.db");
 
     if(!db.open())
     {
@@ -74,7 +74,7 @@ void DbManager::queryMenu(QString menuname){
 }
 // 查询所有菜品
 void DbManager::getMenuAll(){
-    model->setTable("menu");
+    model->setTable("menus");
     model->select();
 }
 //更新菜品
@@ -104,6 +104,7 @@ bool DbManager::verifyUser(const QString& name, const QString& pwd){
         return false;
     }
 }
+
 
 //将菜单发送给客户端
 QString DbManager::getMenuToClient(){

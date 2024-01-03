@@ -36,7 +36,7 @@ private slots:
 private:
     Ui::dealorder *ui;
     TcpServers& instance = TcpServers::getInstance();
-    int dealtotal_num_ = 0;
+    int dealtotal_num_ = 0; // 订单总数
     dealitems dealitem_[50];
 };
 

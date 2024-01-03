@@ -8,6 +8,7 @@ menu::menu(QWidget *parent)
     , ui(new Ui::menu)
 {
     ui->setupUi(this);
+    menu_db_manager.getMenuAll();
     ui->menutableView->setModel(menu_db_manager.model);
 }
 

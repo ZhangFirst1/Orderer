@@ -74,7 +74,7 @@ void DbManager::queryMenu(QString menuname){
 }
 // 查询所有菜品
 void DbManager::getMenuAll(){
-    model->setTable("menus");
+    model->setTable("menu");
     model->select();
 }
 //更新菜品

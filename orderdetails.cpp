@@ -1,6 +1,5 @@
 #include "orderdetails.h"
 #include "ui_orderdetails.h"
-#include "dbmanager.h"
 #include "dealorder.h"
 
 orderdetails::orderdetails(QWidget *parent)
@@ -8,7 +7,6 @@ orderdetails::orderdetails(QWidget *parent)
     , ui(new Ui::orderdetails)
 {
     ui->setupUi(this);
-    //ui->ordertableView->setModel(od_db_manager.model);
 }
 
 orderdetails::~orderdetails()
@@ -24,9 +22,7 @@ void orderdetails::on_odshowButton_clicked()
 
 void orderdetails::on_odreturnButton_clicked()
 {
-    dealorder *do_=new dealorder();
-    do_->show();
+    parentWidget()->show();
     delete this;
-
 }
 

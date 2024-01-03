@@ -45,13 +45,16 @@ dealorder::dealorder(QWidget *parent)
 
 
     // 需要获取前台传输的订单
-    int order_num = instance.getTotalOrderNum();
+    int ordernum = instance.getTotalOrderNum();
 
     QVBoxLayout * ScrollLayout =new QVBoxLayout();
     memset(dealitem_, 0, sizeof dealitem_);
-    struct OneOrder one_order = instance.getOneOrder(0);
-    QWidget * dealrowWidget1=createdealRowWidget(QString::number(0), one_order.user_name, one_order.date);
+    struct OneOrder one_order = instance.getOneOrder(dealtotal_num_);
+
+    one_order.order_num = ordernum;
+    QWidget * dealrowWidget1=createdealRowWidget(QString::number(dealtotal_num_), one_order.user_name, one_order.date);
     ScrollLayout->addWidget(dealrowWidget1);
+    dealtotal_num_++;
     ui->scrollArea->widget()->setLayout(ScrollLayout);
 }
 
@@ -62,8 +65,11 @@ dealorder::~dealorder()
 
 void dealorder::on_dealorderreturnButton_clicked()
 {
-    backend * back=new backend;
-    back->show();
-    delete this;
+    this->hide();
+    parentWidget()->show();
+
+    // backend * back=new backend;
+    // back->show();
+    // delete this;
 }
 

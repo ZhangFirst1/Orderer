@@ -13,10 +13,10 @@ int main(int argc, char *argv[])
 
     //MainWindow w;
     //w.show();
-    Login l;
-    l.show();
-    //backend beck;
-    //beck.show();
+    //Login l;
+    //l.show();
+    backend beck;
+    beck.show();
 
     return a.exec();
 }

@@ -1,4 +1,3 @@
-
 #include "myorder.h"
 #include "ui_myorder.h"
 #include "tcpclient.h"
@@ -56,16 +55,34 @@ void MyOrder::creatItem(){
 }
 
 void MyOrder::myOrderButton_clicked(){
-    QMessageBox msgBox;
-    msgBox.setText("您确定要下单吗");
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    msgBox.exec();
-    QString order;
-    QDateTime dateTime= QDateTime::currentDateTime();
-    order += QString::number(total_num_) + "@" + TcpClient::name + "@" + dateTime.toString() + "@";
-    for(int i=0; i<total_num_; i++){
-        order += item_[i].name + "#" + QString::number(item_[i].price) + "#" + QString::number(item_[i].num) + "$";
+    QMessageBox::StandardButton box;
+    box = QMessageBox::question(this, "提示", "确定要下单嘛?", QMessageBox::Yes|QMessageBox::No);
+    if(box==QMessageBox::Yes){
+        QString order;
+        QDateTime dateTime= QDateTime::currentDateTime();
+        order += QString::number(total_num_) + "@" + TcpClient::name + "@" + dateTime.toString() + "@";
+        for(int i=0; i<total_num_; i++){
+            order += item_[i].name + "#" + QString::number(item_[i].price) + "#" + QString::number(item_[i].num) + "$";
+        }
+        qDebug() << order;
+        TcpClient::WriteToServer(order, "ORDER");
+        qDebug() << "已下单";
+
+        TcpClient& instance = TcpClient::getInstance();
+        if(TcpClient::server == NULL){
+            qDebug() << "NULL";
+        }
+
+        QEventLoop loop;
+        connect(TcpClient::server, SIGNAL(readyRead()), &loop, SLOT(quit()));
+        loop.exec();
+
+        if(instance.is_done_ == true){
+            box = QMessageBox::question(this, "取餐提醒", "请取单");
+            if(box==QMessageBox::Yes){
+                delete ui->scrollArea->widget();
+                ui->label_total_price->setText("0元");
+            }
+        }
     }
-    qDebug() << order;
-    TcpClient::WriteToServer(order, "ORDER");
 }

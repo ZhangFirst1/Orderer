@@ -15,7 +15,8 @@ public:
     static void WriteToServer(const QString& s,const QString& type);
     static void WriteToServer(const QString& type);
     static QTcpSocket* server;
-    bool isLogin_;
+    bool isLogin_ = false;
+    bool is_done_ = false;
     QString getMenuFromServer();
 
 public slots:

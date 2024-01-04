@@ -39,6 +39,7 @@ void backend::dealButton_clicked()
     this->hide();
     dealorder *dorder=new dealorder(this);
     dorder->setWindowFlag(Qt::Window);
+    dorder->creatAll();
     dorder->show();
 }
 void backend::recordButton_clicked()

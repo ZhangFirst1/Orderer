@@ -59,7 +59,7 @@ void TcpClient::readFromServer(){
     }else if(type == "MENU"){
         menu = content;
     }else if(type == "ORDER_DONE"){
-
+        is_done_ = true;
     }
 }
 

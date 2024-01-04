@@ -24,6 +24,7 @@ TcpServers::~TcpServers() {
 }
 
 void TcpServers::Init(){
+    memset(order_items_, 0, sizeof order_items_);
     m_server = new QTcpServer();
     // 开启监听
     m_server->listen(QHostAddress::Any, 8000);
@@ -93,14 +94,13 @@ void TcpServers::sendMenuToClient(){
 
 void TcpServers::handleOrder(QString& content){
     qDebug() << "handleOrder" << content;
-    memset(order_items_, 0, sizeof order_items_);
     QString cnt_string = content.section("@", 0, 0);
     QString user_name = content.section("@", 1, 1);
     QString date = content.section("@", 2, 2);
     int cnt = cnt_string.toInt();
     order_items_[total_order_].order_num = cnt;
     content.remove(0, cnt_string.size()+user_name.size()+date.size()+3);
-    qDebug() << "After remove:" << content;
+
     // 处理分割后的信息
     for(int i=0; i < cnt; i++){
         // 菜名 价格 库存
@@ -109,12 +109,18 @@ void TcpServers::handleOrder(QString& content){
         double price = row_now.section("#", 1, 1).toDouble();
         int store = row_now.section("#", 2, 2).toInt();
         // db_manager.handleOrder(dish_name, store);
-        qDebug() << "Servers分割后" << dish_name << ' ' << price << " " << store;
         order_items_[total_order_].order[i].name = dish_name;
         order_items_[total_order_].order[i].price = price;
         order_items_[total_order_].order[i].store = store;
         order_items_[total_order_].date = date;
         order_items_[total_order_].user_name = user_name;
-        total_order_++;
     }
+    total_order_++;
+    qDebug() << total_order_;
+    qDebug() << "0的" << order_items_[0].user_name;
+}
+
+void TcpServers::sendOrderDoneToClinet(){
+    QByteArray text = "ORDER_DONE ";
+    m_client->write(text);
 }

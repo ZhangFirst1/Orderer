@@ -114,13 +114,16 @@ void TcpServers::handleOrder(QString& content){
         order_items_[total_order_].order[i].store = store;
         order_items_[total_order_].date = date;
         order_items_[total_order_].user_name = user_name;
+        updateSales(dish_name, store);
     }
     total_order_++;
-    qDebug() << total_order_;
-    qDebug() << "0的" << order_items_[0].user_name;
 }
 
 void TcpServers::sendOrderDoneToClinet(){
     QByteArray text = "ORDER_DONE ";
     m_client->write(text);
+}
+
+void TcpServers::updateSales(const QString& dishname, const int& sale){
+    sales[dishname] += sale;
 }

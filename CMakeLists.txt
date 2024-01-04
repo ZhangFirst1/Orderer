@@ -40,6 +40,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         menu.h menu.cpp menu.ui
         dealorder.h dealorder.cpp dealorder.ui
         orderdetails.h orderdetails.cpp orderdetails.ui
+        statisticaltable.h statisticaltable.cpp statisticaltable.ui
 
     )
 # Define target properties for Android with Qt 6 as:

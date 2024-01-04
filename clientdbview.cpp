@@ -1,17 +1,17 @@
 #include "clientdbview.h"
 #include "ui_clientdbview.h"
-#include "backend.h"
+
 
 clientdbview::clientdbview(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::clientdbview)
 {
     ui->setupUi(this);
-    connect(ui->clientviewButton,&QPushButton::clicked,this,&clientdbview::clientview_clicked);
-    connect(ui->selectButon,&QPushButton::clicked,this,&clientdbview::clientselect_clicked);
-    connect(ui->addButton,&QPushButton::clicked,this,&clientdbview::clientadd_clicked);
-    connect(ui->updateButton,&QPushButton::clicked,this,&clientdbview::clientupdate_clicked);
-    connect(ui->deleteButton,&QPushButton::clicked,this,&clientdbview::clientdelete_clicked);
+    connect(ui->clientviewButton, &QPushButton::clicked, this, &clientdbview::clientview_clicked);
+    connect(ui->selectButon, &QPushButton::clicked, this, &clientdbview::clientselect_clicked);
+    connect(ui->addButton, &QPushButton::clicked, this, &clientdbview::clientadd_clicked);
+    connect(ui->updateButton, &QPushButton::clicked, this, &clientdbview::clientupdate_clicked);
+    connect(ui->deleteButton, &QPushButton::clicked, this, &clientdbview::clientdelete_clicked);
     connect(ui->backButton, &QPushButton::clicked, this, &clientdbview::client_back_clicked);
     db_manager.getClientAll();
     ui->tableView->setModel(db_manager.model);

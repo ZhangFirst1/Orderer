@@ -30,9 +30,7 @@ QWidget * dealorder::createdealRowWidget(const QString &deallabelText1, const QS
     {
         this->hide();
         orderdetails* od_db = new orderdetails(this, &this->dealitem_[dealtotal_num_-1]);
-        qDebug() << "Before transmit:" << this->dealitem_[dealtotal_num_-1].order[0].name;
-        qDebug() << "Before transmit:" << this->dealitem_[dealtotal_num_-1].order[1].name;
-        qDebug() << "Address:" << &this->dealitem_[dealtotal_num_-1];
+
         od_db->setWindowFlag(Qt::Window);
         od_db->creatItem();
         od_db->show();
@@ -70,7 +68,6 @@ void dealorder::creatAll(){
 
     for(int i=0;i<dealtotal_num_;i++){
         dealitem_[i] = instance.getOneOrder(i);
-        qDebug() << i << ' ' << dealitem_[i].user_name;
         // 接收到数据
         QWidget *dealrowWidget = createdealRowWidget(QString::number(i), dealitem_[i].user_name, dealitem_[i].date);
         ScrollLayout->addWidget(dealrowWidget);

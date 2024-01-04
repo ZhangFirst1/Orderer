@@ -3,6 +3,8 @@
 #include "clientdbview.h"
 #include "menu.h"
 #include "dealorder.h"
+#include "statisticaltable.h"
+
 
 backend::backend(QWidget *parent)
     : QWidget(parent)
@@ -44,7 +46,10 @@ void backend::dealButton_clicked()
 }
 void backend::recordButton_clicked()
 {
-
+    this->hide();
+    StatisticalTable* st = new StatisticalTable(this);
+    st->setWindowFlag(Qt::Window);
+    st->show();
 }
 void backend::closeButton_clicked()
 {

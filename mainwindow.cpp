@@ -84,7 +84,6 @@ MainWindow::MainWindow(QWidget *parent)
         QString dish_name = row_now.section("#", 0, 0);
         double price = row_now.section("#", 1, 1).toDouble();
         int store = row_now.section("#", 2, 2).toInt();
-        qDebug() << "分割后" << dish_name << ' ' << price << " " << store;
 
         QWidget* rowWidge1 = createRowWidget(dish_name, price , store, "下单");
         scrollLayout->addWidget(rowWidge1);

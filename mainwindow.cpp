@@ -62,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
     order_num_ = 0;
     QVBoxLayout *scrollLayout = new QVBoxLayout();
     // 从后端获取数据
-    TcpClient& instance = TcpClient::getInstance();
+
     if(TcpClient::server == NULL){
         qDebug() << "NULL";
     }else{
@@ -96,11 +96,19 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::myOrderButton_clicked(){
     this->hide();
     MyOrder* order = new MyOrder(this);
-    order->getTotalNum() = this->order_num_;
-    for(int i=0;i<order_num_;i++){
-        order->getItem()[i].name = this->item_[i].name;
-        order->getItem()[i].num = this->item_[i].num;
-        order->getItem()[i].price = this->item_[i].price;
+    if(instance.is_done_==false)
+    {
+        order->getTotalNum() = this->order_num_;
+        for(int i=0;i<order_num_;i++){
+            order->getItem()[i].name = this->item_[i].name;
+            order->getItem()[i].num = this->item_[i].num;
+            order->getItem()[i].price = this->item_[i].price;
+        }
+    }else
+    {
+        this->order_num_ = 0;
+        memset(this->item_,0,sizeof(this->item_));
+        instance.is_done_ = false;
     }
     order->creatItem();
     order->show();

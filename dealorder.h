@@ -23,7 +23,7 @@ class dealorder : public QWidget
 public:
     explicit dealorder(QWidget *parent = nullptr);
     ~dealorder();
-    QWidget* createdealRowWidget(const QString &deallabelText1, const QString &deallabelText2, const QString &time);
+    QWidget* createdealRowWidget(const QString &deallabelText1, const QString &deallabelText2, const QString &time, const int& index);
     void creatAll();
 
     int dealtotal_num_ = 0; // 订单总数
@@ -34,6 +34,7 @@ private slots:
 private:
     Ui::dealorder *ui;
     TcpServers& instance = TcpServers::getInstance();
+    static long long over_orders;    // 已经处理完成的订单编号
 
 
 };

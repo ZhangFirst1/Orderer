@@ -8,6 +8,7 @@
 #include <QString>
 #include <QValidator>
 #include <Qt>
+#include "tcpclient.h"
 
 struct MyItems{
     QString name;
@@ -38,5 +39,6 @@ private:
     Ui::MainWindow *ui;
     int order_num_;
     MyItems item_[50];
+    TcpClient& instance = TcpClient::getInstance();
 };
 #endif // MAINWINDOW_H

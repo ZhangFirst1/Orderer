@@ -5,6 +5,7 @@
 #include "dealorder.h"
 #include "statisticaltable.h"
 
+long long dealorder::over_orders = 0;
 
 backend::backend(QWidget *parent)
     : QWidget(parent)

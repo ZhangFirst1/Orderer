@@ -5,6 +5,7 @@
 #include <QTcpSocket>
 #include <QTcpServer>
 #include <QByteArray>
+#include <QString>
 #include <map>
 
 

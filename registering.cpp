@@ -27,14 +27,17 @@ void Registering::registerButton_clicked()
         ui->accountEdit->clear();
         ui->passwdEdit->clear();
         ui->ensureEdit->clear();
-    }else{
+    }else if(account=="" || passwd1==""){
+        QMessageBox::warning(this,"警号","输入不能为空！");
+    }
+    else{
         // 启用客户端连接
         TcpClient& instance = TcpClient::getInstance();
         // 判断连接并向后台发送登录请求
         if(TcpClient::server == NULL){
             qDebug() << "NULL";
         }else{
-            TcpClient::WriteToServer(ui->accountEdit->text() + " " + ui->passwdEdit->text(), "registering");
+            TcpClient::WriteToServer(ui->accountEdit->text() + " " + ui->passwdEdit->text(), "REGISTER");
         }
 
         // 在事件循环中等待响应
@@ -43,6 +46,7 @@ void Registering::registerButton_clicked()
         loop.exec();
 
         if(instance.registered == true){
+            instance.registered = false;
             QMessageBox::information(this,"提示","注册成功，请登录");
             this->close();
             parentWidget()->show();

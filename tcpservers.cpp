@@ -91,10 +91,12 @@ void TcpServers::readDiffFromClient(){
         sendMenuToClient();
     }else if(type == "ORDER"){
         handleOrder(content);
-    }else{
+    }else if(type == "REGISTER"){
         QString username = s.section(' ', 1, 1);
         QString pwd = s.section(' ', 2, 2);
         QByteArray registerText;
+        qDebug() << username;
+
         bool ret = db_manager.isexisted(username);
         if(ret==true){
             registerText = "NO ";

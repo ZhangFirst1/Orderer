@@ -27,6 +27,7 @@ void TcpClient::Init(){
     // 连接服务器端
     server->connectToHost(QHostAddress("127.0.0.1"), 8000);
     connect(server, &QTcpSocket::readyRead, this, &TcpClient::readFromServer);
+    connect(server, &QTcpSocket::disconnected, this, &TcpClient::handleDisconnected);
 
     // 判断连接状态
     if(server == NULL){
@@ -35,6 +36,10 @@ void TcpClient::Init(){
         std::cout << "connect success" << std::endl;
     }
 
+}
+
+void TcpClient::handleDisconnected(){
+    qDebug() << "**disconnected from server**";
 }
 
 void TcpClient::WriteToServer(const QString& s,const QString& type){

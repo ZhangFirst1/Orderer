@@ -49,7 +49,7 @@ QWidget * dealorder::createdealRowWidget(const QString &deallabelText1, const QS
         deallabel4->setText("已处理");
         button2->setEnabled(false);
         this->over_orders |= (1 << index);
-        instance.sendOrderDoneToClinet();
+        instance.sendOrderDoneToClinet(deallabelText2);
     });
 
     dealrowWidget->setLayout(dealrowLayout);

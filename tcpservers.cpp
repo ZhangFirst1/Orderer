@@ -3,7 +3,7 @@
 
 
 QTcpServer* TcpServers::m_server;
-QTcpSocket* TcpServers::m_client;
+QTcpSocket* TcpServers::m_client = nullptr;
 
 // 单例模式
 TcpServers& TcpServers::getInstance(){
@@ -14,11 +14,17 @@ TcpServers& TcpServers::getInstance(){
 TcpServers::TcpServers() {
     Init();
     connect(m_server, &QTcpServer::newConnection, this, &TcpServers::newConnection);
-    //if(!m_client)
-    //    connect(m_client, &QTcpSocket::disconnected, this, &TcpServers::handleDisconnect);
 }
 
 TcpServers::~TcpServers() {
+    // 确保断开socket连接，停止服务器监听
+    if(m_client != nullptr){
+        if(m_client->state() == QAbstractSocket::ConnectedState)
+            m_client->disconnectFromHost(); // 断开与客户端的连接
+    }
+    if(m_server->isListening()){
+        m_server->close();                  // 停止网络监听
+    }
     delete m_server;
     delete m_client;
 }
@@ -33,16 +39,24 @@ void TcpServers::Init(){
 void TcpServers::newConnection(){
     if(m_client == NULL){
         // 处理客户端的连接请求
+        m_client = new QTcpSocket();
         m_client = m_server->nextPendingConnection();
         // 发送数据
         connect(m_client, &QTcpSocket::readyRead, this, &TcpServers::readDiffFromClient);
+        connect(m_client, &QTcpSocket::connected, this, &TcpServers::handleConnected);
+        handleConnected();  // 运行一次槽函数显示状态
+        connect(m_client, &QTcpSocket::disconnected, this, &TcpServers::handleDisconnect);
     }
 }
 
 void TcpServers::handleDisconnect(){
-    m_client->disconnectFromHost();
-    m_client->close();
-    m_client = NULL;
+    m_client->deleteLater();
+}
+
+void TcpServers::handleConnected(){
+    qDebug() << "**client socket connected**";
+    qDebug() << "**peer address:" << m_client->peerAddress().toString();
+    qDebug() << "**peer port:" << QString::number(m_client->peerPort());
 }
 
 void TcpServers::ReadFromClient(QString& s){

@@ -34,6 +34,8 @@ public:
     void getQrderdetailsAll();  
     // 做菜后修改菜品库存
     void handleOrder(QString name, int num);
+    // 注册时查询用户是否存在
+    bool isexisted(const QString& name);
 
     QSqlTableModel *model;
     QSqlQuery *query;

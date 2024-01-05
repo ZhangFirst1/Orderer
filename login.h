@@ -18,7 +18,7 @@ public:
 private slots:
     void loginButton_clicked();
     void adminButton_clicked();
-
+    void registerButton_clicked();
 private:
     Ui::Login *ui;
 };

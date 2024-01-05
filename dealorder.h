@@ -34,9 +34,7 @@ private slots:
 private:
     Ui::dealorder *ui;
     TcpServers& instance = TcpServers::getInstance();
-    static long long over_orders;    // 已经处理完成的订单编号
-
-
+    static unsigned long long over_orders;    // 已经处理完成的订单编号
 };
 
 #endif // DEALORDER_H

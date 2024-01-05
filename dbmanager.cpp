@@ -136,3 +136,16 @@ void DbManager::handleOrder(QString name, int num){
     query->bindValue(":dishName", name);
     query->exec();
 }
+
+// 注册时查询用户是否存在
+bool DbManager::isexisted(const QString& name){
+    //model->setTable("client");
+    model->setFilter(QString("account = '%1'").arg(name));
+    model->select();
+
+    if (model->rowCount() > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}

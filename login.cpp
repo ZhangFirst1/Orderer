@@ -1,3 +1,4 @@
+#include "registering.h"
 #include "login.h"
 #include "ui_login.h"
 #include "tcpclient.h"
@@ -12,8 +13,9 @@ Login::Login(QWidget *parent)
     , ui(new Ui::Login)
 {
     ui->setupUi(this);
-    connect(ui->loginButton, &QPushButton::pressed, this, &Login::loginButton_clicked);
-    connect(ui->adminButton, &QPushButton::pressed, this, &Login::adminButton_clicked);
+    connect(ui->loginButton, &QPushButton::clicked, this, &Login::loginButton_clicked);
+    connect(ui->adminButton, &QPushButton::clicked, this, &Login::adminButton_clicked);
+    connect(ui->registerButton, &QPushButton::clicked, this, &Login::registerButton_clicked);
 }
 
 Login::~Login()
@@ -50,4 +52,12 @@ void Login::adminButton_clicked(){
     AdminLogin* a_login = new AdminLogin(this);
     a_login->show();
     this->hide();
+}
+
+void Login::registerButton_clicked()
+{
+    this->hide();
+    Registering* rs = new Registering(this);
+    rs->setWindowFlag(Qt::Window);
+    rs->show();
 }

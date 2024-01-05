@@ -78,7 +78,18 @@ void TcpServers::readDiffFromClient(){
     }else if(type == "ORDER"){
         handleOrder(content);
     }else{
-        qDebug() << "暂未实现";
+        QString username = s.section(' ', 1, 1);
+        QString pwd = s.section(' ', 2, 2);
+        QByteArray registerText;
+        bool ret = db_manager.isexisted(username);
+        if(ret==true){
+            registerText = "NO ";
+        }
+        else{
+            registerText = "OK ";
+            db_manager.addClientSql(username,pwd);
+        }
+        m_client->write(registerText);
     }
 }
 

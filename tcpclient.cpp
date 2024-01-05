@@ -60,6 +60,8 @@ void TcpClient::readFromServer(){
         menu = content;
     }else if(type == "ORDER_DONE"){
         is_done_ = true;
+    }else if(type == "OK"){
+        registered = true;
     }
 }
 

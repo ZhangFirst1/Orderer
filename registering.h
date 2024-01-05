@@ -7,6 +7,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include "dbmanager.h"
+#include "tcpclient.h"
 
 namespace Ui {
 class Registering;

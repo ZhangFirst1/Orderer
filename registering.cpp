@@ -24,25 +24,33 @@ void Registering::registerButton_clicked()
     if(passwd1 != passwd2)
     {
         QMessageBox::warning(this,"警告","两次密码不一致，请重新输入");
+        ui->accountEdit->clear();
         ui->passwdEdit->clear();
         ui->ensureEdit->clear();
     }else{
-        bool ret = instance.isexisted(account);
-        if(ret == true){
-            QMessageBox::warning(this,"警告","账号已经存在,请重新输入");
-            ui->accountEdit->clear();
+        // 启用客户端连接
+        TcpClient& instance = TcpClient::getInstance();
+        // 判断连接并向后台发送登录请求
+        if(TcpClient::server == NULL){
+            qDebug() << "NULL";
+        }else{
+            TcpClient::WriteToServer(ui->accountEdit->text() + " " + ui->passwdEdit->text(), "registering");
         }
-        else
-        {
-            QSqlQuery sql_query;
-            QString sql = "insert into client values (?, ?)";
-            sql_query.prepare(sql);
-            sql_query.addBindValue(account);
-            sql_query.addBindValue(passwd1);
-            sql_query.exec();
+
+        // 在事件循环中等待响应
+        QEventLoop loop;
+        connect(TcpClient::server, SIGNAL(readyRead()), &loop, SLOT(quit()));
+        loop.exec();
+
+        if(instance.registered == true){
             QMessageBox::information(this,"提示","注册成功，请登录");
             this->close();
             parentWidget()->show();
+        }else{
+            QMessageBox::warning(this,"警告","用户已存在，请重新输入");
+            ui->accountEdit->clear();
+            ui->passwdEdit->clear();
+            ui->ensureEdit->clear();
         }
     }
 }

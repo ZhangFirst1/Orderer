@@ -149,3 +149,12 @@ bool DbManager::isexisted(const QString& name){
         return false;
     }
 }
+void DbManager::addClientSql(const QString &name, const QString &pwd)
+{
+    QSqlQuery sql_query;
+    QString sql = "insert into client values (?, ?)";
+    sql_query.prepare(sql);
+    sql_query.addBindValue(name);
+    sql_query.addBindValue(pwd);
+    sql_query.exec();
+}

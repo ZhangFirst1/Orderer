@@ -37,6 +37,10 @@ public:
     // 注册时查询用户是否存在
     bool isexisted(const QString& name);
 
+    //用sql语句在客户表中插入数据
+    void addClientSql(const QString& name, const QString& pwd);
+
+
     QSqlTableModel *model;
     QSqlQuery *query;
 private:

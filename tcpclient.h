@@ -17,6 +17,7 @@ public:
     static QTcpSocket* server;
     bool isLogin_ = false;
     bool is_done_ = false;
+    bool registered = false;
     QString getMenuFromServer();
 
 public slots:

@@ -7,6 +7,7 @@
 #include <QByteArray>
 #include <QString>
 #include <map>
+#include <QList>
 
 
 struct DetailedOrder{
@@ -38,13 +39,12 @@ public:
     static TcpServers& getInstance();
     ~TcpServers();
     void Init();
-    static void ReadFromClient(QString& s);                         // 接受数据
     void sendMenuToClient();                                        // 向前台发菜单
     void handleOrder(QString& content);                             // 处理订单
     OneOrder getOneOrder(int num) { return order_items_[num]; };    // 获取指定订单
     int getTotalOrderNum() { return total_order_; }                 // 获取订单总数
     void getSales(std::map<QString, int> &sale) { sale = this->sales;}   // 获取销量
-    void sendOrderDoneToClinet();                                   // 向客户端发送订单处理完成信息
+    void sendOrderDoneToClinet(const QString& username);            // 向客户端发送订单处理完成信息
     void updateSales(const QString& dishname, const int& sale);     // 更新销量
 
 public slots:
@@ -55,7 +55,10 @@ public slots:
 
 private:
     static QTcpServer* m_server;    // TCP服务器
-    static QTcpSocket* m_client;    // TCP通信的socket
+    QTcpSocket* m_client = nullptr;    // TCP通信的socket
+    QTcpSocket* tmp_socket;         // 用于处理不同端口发送问题
+    QList<QTcpSocket*> socket_list; // socket列表
+
     DbManager& db_manager = DbManager::getDbInstance();
     OneOrder order_items_[20];      // 接收到的订单信息
     int total_order_ = 0;           // 共有几个订单

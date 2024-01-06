@@ -3,7 +3,7 @@
 
 
 QTcpServer* TcpServers::m_server;
-QTcpSocket* TcpServers::m_client = nullptr;
+// QTcpSocket* TcpServers::m_client = nullptr;
 
 // 单例模式
 TcpServers& TcpServers::getInstance(){
@@ -27,6 +27,8 @@ TcpServers::~TcpServers() {
     }
     delete m_server;
     delete m_client;
+    delete tmp_socket;
+    socket_list.clear();
 }
 
 void TcpServers::Init(){
@@ -36,20 +38,36 @@ void TcpServers::Init(){
     m_server->listen(QHostAddress::Any, 8000);
 }
 
+
 void TcpServers::newConnection(){
-    if(m_client == NULL){
-        // 处理客户端的连接请求
-        m_client = new QTcpSocket();
-        m_client = m_server->nextPendingConnection();
-        // 发送数据
-        connect(m_client, &QTcpSocket::readyRead, this, &TcpServers::readDiffFromClient);
-        connect(m_client, &QTcpSocket::connected, this, &TcpServers::handleConnected);
-        handleConnected();  // 运行一次槽函数显示状态
-        connect(m_client, &QTcpSocket::disconnected, this, &TcpServers::handleDisconnect);
-    }
+    m_client = new QTcpSocket();
+    m_client = m_server->nextPendingConnection();
+    // 加入列表
+    socket_list.append(m_client);
+    connect(m_client, &QTcpSocket::readyRead, this, &TcpServers::readDiffFromClient);
+    connect(m_client, &QTcpSocket::connected, this, &TcpServers::handleConnected);
+    handleConnected();  // 运行一次槽函数显示状态
+    connect(m_client, &QTcpSocket::disconnected, this, &TcpServers::handleDisconnect);
 }
 
 void TcpServers::handleDisconnect(){
+
+    for (QList<QTcpSocket*>::iterator it = socket_list.begin(); it != socket_list.end(); ) {
+        // 获取当前迭代器指向的QTcpSocket
+        QTcpSocket *currentSocket = *it;
+
+        // 判断QTcpSocket的连接状态是否为断开
+        if (currentSocket->state() == QAbstractSocket::UnconnectedState) {
+            // 如果连接已断开，则删除该项
+            it = socket_list.erase(it);
+            qDebug() << "Socket disconnected and removed from the list.";
+            qDebug() << socket_list.size();
+        } else {
+            // 如果连接没有断开，则继续遍历下一项
+            ++it;
+        }
+    }
+
     m_client->deleteLater();
 }
 
@@ -59,53 +77,63 @@ void TcpServers::handleConnected(){
     qDebug() << "**peer port:" << QString::number(m_client->peerPort());
 }
 
-void TcpServers::ReadFromClient(QString& s){
-    connect(m_client, &QTcpSocket::readyRead, [&](){
-        // 接受数据
-        QByteArray array = m_client->readAll();
-        s = array;
-    });
-}
-
 void TcpServers::readDiffFromClient(){
     DbManager db_manager = DbManager::getDbInstance();
-    QByteArray array = m_client->readAll();
-    QString s = array;
-    QString type = s.section(' ', 0, 0);
-    QString content = s.section(' ', 1);
-    qDebug() << "Receive From Client:" << s;
-    // 判断登录状态
-    if(type == "LOGIN"){
-        QString username = s.section(' ', 1, 1);
-        QString pwd = s.section(' ', 2, 2);
-        QByteArray text;
 
-        if(db_manager.verifyUser(username, pwd)){
-            text = "TRUE ";
-        }
-        else{
-            text = "FALSE ";
-        }
-        m_client->write(text);
-    }else if(type == "MENU"){
-        sendMenuToClient();
-    }else if(type == "ORDER"){
-        handleOrder(content);
-    }else if(type == "REGISTER"){
-        QString username = s.section(' ', 1, 1);
-        QString pwd = s.section(' ', 2, 2);
-        QByteArray registerText;
-        qDebug() << username;
+    QByteArray array;
+    // 遍历所有连接的Socket，若该端口收到数据则做出相应
+    // 该部分可以用多线程 待更改
 
-        bool ret = db_manager.isexisted(username);
-        if(ret==true){
-            registerText = "NO ";
+    for(int i = 0; i < socket_list.count(); i++){
+
+        tmp_socket = socket_list.at(i);
+        array = tmp_socket->readAll();
+
+        if(array.length() != 0){
+            QString s = array;
+            QString type = s.section(' ', 0, 0);
+            QString content = s.section(' ', 1);
+            qDebug() << "Receive From Client:" << s;
+            // 判断登录状态
+            if(type == "LOGIN"){
+                QString username = s.section(' ', 1, 1);
+                QString pwd = s.section(' ', 2, 2);
+                QByteArray text;
+
+                if(db_manager.verifyUser(username, pwd)){
+                    text = "TRUE ";
+                }
+                else{
+                    text = "FALSE ";
+                }
+                // 为socket设置属性为用户名，标识socket
+                socket_list.at(i)->setProperty("username", username);
+                tmp_socket->write(text);
+                qDebug() << "设置该连接的属性名为" << username;
+                //m_client->write(text);
+
+            }else if(type == "MENU"){
+                sendMenuToClient();
+            }else if(type == "ORDER"){
+                handleOrder(content);
+            }else if(type == "REGISTER"){
+                QString username = s.section(' ', 1, 1);
+                QString pwd = s.section(' ', 2, 2);
+                QByteArray registerText;
+                qDebug() << username;
+
+                bool ret = db_manager.isexisted(username);
+                if(ret==true){
+                    registerText = "NO ";
+                }
+                else{
+                    registerText = "OK ";
+                    db_manager.addClientSql(username,pwd);
+                }
+                m_client->write(registerText);
+            }
+
         }
-        else{
-            registerText = "OK ";
-            db_manager.addClientSql(username,pwd);
-        }
-        m_client->write(registerText);
     }
 }
 
@@ -113,9 +141,9 @@ void TcpServers::sendMenuToClient(){
     QString content = db_manager.getMenuToClient();
     QByteArray text = "MENU " + content.toUtf8();
     if(content == "NULL"){
-        m_client->write("NULL");
+        tmp_socket->write("NULL");
     }else{
-        m_client->write(text);
+        tmp_socket->write(text);
     }
 }
 
@@ -146,9 +174,18 @@ void TcpServers::handleOrder(QString& content){
     total_order_++;
 }
 
-void TcpServers::sendOrderDoneToClinet(){
+void TcpServers::sendOrderDoneToClinet(const QString& username){
     QByteArray text = "ORDER_DONE ";
-    m_client->write(text);
+    // m_client->write(text);
+    // 遍历找到要发送信息的客户端
+    qDebug() << username;
+    for(auto it: socket_list){
+        qDebug() << it->property("username").toString();
+        if(it->property("username") == username){
+            qDebug() << "判断成功" << it->property("username").toString();
+            it->write(text);
+        }
+    }
 }
 
 void TcpServers::updateSales(const QString& dishname, const int& sale){

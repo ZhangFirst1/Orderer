@@ -49,6 +49,13 @@ QWidget * dealorder::createdealRowWidget(const QString &deallabelText1, const QS
         deallabel4->setText("已处理");
         button2->setEnabled(false);
         this->over_orders |= (1 << index);
+
+        for(int i=0; i < this->dealitem_[index].order_num; i++){
+            qDebug() << dealitem_[index].user_name;
+            DbInstance.handleOrder(this->dealitem_[index].order[i].name, this->dealitem_[index].order[i].store);
+
+        }
+
         instance.sendOrderDoneToClinet(deallabelText2);
     });
 
@@ -80,6 +87,7 @@ void dealorder::creatAll(){
     for(int i=0;i<dealtotal_num_;i++){
         dealitem_[i] = instance.getOneOrder(i);
         // 接收到数据
+
         QWidget *dealrowWidget = createdealRowWidget(QString::number(i), dealitem_[i].user_name, dealitem_[i].date, i);
         ScrollLayout->addWidget(dealrowWidget);
     }

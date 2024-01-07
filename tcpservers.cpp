@@ -96,6 +96,7 @@ void TcpServers::readDiffFromClient(){
             qDebug() << "Receive From Client:" << s;
             // 判断登录状态
             if(type == "LOGIN"){
+
                 QString username = s.section(' ', 1, 1);
                 QString pwd = s.section(' ', 2, 2);
                 QByteArray text;
@@ -163,7 +164,7 @@ void TcpServers::handleOrder(QString& content){
         QString dish_name = row_now.section("#", 0, 0);
         double price = row_now.section("#", 1, 1).toDouble();
         int store = row_now.section("#", 2, 2).toInt();
-        // db_manager.handleOrder(dish_name, store);
+
         order_items_[total_order_].order[i].name = dish_name;
         order_items_[total_order_].order[i].price = price;
         order_items_[total_order_].order[i].store = store;

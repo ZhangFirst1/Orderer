@@ -131,10 +131,28 @@ QString DbManager::getMenuToClient(){
 
 // 做菜后修改菜品库存
 void DbManager::handleOrder(QString name, int num){
-    query->prepare("UPDATE dishes SET store = quantity - :quantityToDecrease WHERE dishname = :dishName");
-    query->bindValue(":quantityToDecrease", num);
-    query->bindValue(":dishName", name);
-    query->exec();
+    model->setTable("menu");
+    model->setFilter(QString("dishname = '%1'").arg(name));
+    model->select();
+
+    if (model->rowCount() > 0) {
+        // 获取第一行记录
+        QSqlRecord record = model->record(0);
+
+        // 获取菜品数量列的当前值
+        int currentQuantity = record.value("store").toInt();
+
+        // 指定需要减去的数量
+        int specifiedQuantity = num;
+
+        // 更新记录中的菜品数量
+        model->setData(model->index(0, model->fieldIndex("store")), currentQuantity - specifiedQuantity);
+
+        // 提交所有的更改到数据库
+        if (model->submitAll()) {
+            qDebug() << "Update successful.";
+        }
+    }
 }
 
 // 注册时查询用户是否存在

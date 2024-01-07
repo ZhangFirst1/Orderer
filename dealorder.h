@@ -9,6 +9,7 @@
 #include <QLayout>
 #include <QLabel>
 #include "tcpservers.h"
+#include "dbmanager.h"
 
 
 namespace Ui {
@@ -34,6 +35,7 @@ private slots:
 private:
     Ui::dealorder *ui;
     TcpServers& instance = TcpServers::getInstance();
+    DbManager& DbInstance = DbManager::getDbInstance();
     static unsigned long long over_orders;    // 已经处理完成的订单编号
 };
 

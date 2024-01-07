@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <QSqlQuery>
 #include <QSqlRecord>
-
+#include <QSqlDatabase>
 
 
 class DbManager

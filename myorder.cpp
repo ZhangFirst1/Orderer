@@ -4,18 +4,43 @@
 
 
 // 创建一行信息
-QWidget *createRowWidget(const QString &labelText1, const QString &labelText2, const QString &labelText3)
+QWidget *MyOrder::createRowWidget(const QString &labelText1, const QString &labelText2, const QString &labelText3, const int num)
 {
+
     QWidget *rowWidget = new QWidget();
     QHBoxLayout *rowLayout = new QHBoxLayout(rowWidget);
 
     QLabel *label1 = new QLabel(labelText1);
     QLabel *label2 = new QLabel(labelText2);
     QLabel *label3 = new QLabel(labelText3);
+    QPushButton *deleteButton = new QPushButton("删除");
+
+    connect(deleteButton, &QPushButton::clicked, this, [=](){
+        emit sendData(num,item_[num].name);
+        item_[num].num -= 1;
+        item_[num].price -= item_[num].oneprice;
+        total -= item_[num].oneprice;
+        label3->setText(QString::number(item_[num].price));
+        ui->label_total_price->setText(QString::number(total));
+        if(item_[num].num > 0)
+        {
+            QString curnum = QString::number(item_[num].num);
+            label2->setText(curnum);
+        }
+        else
+        {
+            scrollLayout->removeWidget(rowWidget);
+            delete rowWidget;
+            this->total_num_--;
+        }
+
+    });
 
     rowLayout->addWidget(label1);
     rowLayout->addWidget(label2);
     rowLayout->addWidget(label3);
+    rowLayout->addWidget(deleteButton);
+    flag = false;
 
     rowWidget->setLayout(rowLayout);
     return rowWidget;
@@ -42,13 +67,12 @@ void MyOrder::backButton_clicked(){
 }
 
 void MyOrder::creatItem(){
-    QVBoxLayout *scrollLayout = new QVBoxLayout();
-
-    double total = 0.0;
     for(int i=0; i < total_num_; i++){
-        QWidget* rowWidge1 = createRowWidget(item_[i].name, QString::number(item_[i].num), QString::number(item_[i].price));
-        scrollLayout->addWidget(rowWidge1);
-        total += item_[i].price;
+        if(this->item_[i].num != 0){
+            QWidget* rowWidge1 = createRowWidget(item_[i].name, QString::number(item_[i].num), QString::number(item_[i].price), i);
+            scrollLayout->addWidget(rowWidge1);
+            total += item_[i].price;
+        }
     }
     ui->scrollArea->widget()->setLayout(scrollLayout);
     ui->label_total_price->setText(QString::number(total)+"元");

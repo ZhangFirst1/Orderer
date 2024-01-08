@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "myorder.h"
 #include "tcpclient.h"
+#include "myorder.h"
 
 
 // 创建一行信息
@@ -89,6 +89,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    Init();
+
+    connect(ui->myOrderButton, &QPushButton::clicked, this, &MainWindow::myOrderButton_clicked);
+    connect(this, &MainWindow::triggerInit, this, &MainWindow::Init);
+}
+
+void MainWindow::Init(){
+    qDebug() << "was called";
     order_num_ = 0;
     // 从后端获取数据
 
@@ -126,8 +134,6 @@ MainWindow::MainWindow(QWidget *parent)
         }
     }
     ui->scrollArea->widget()->setLayout(scrollLayout);
-
-    connect(ui->myOrderButton, &QPushButton::clicked, this, &MainWindow::myOrderButton_clicked);
 }
 
 void MainWindow::myOrderButton_clicked(){

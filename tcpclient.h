@@ -19,6 +19,7 @@ public:
     bool isLogin_ = false;
     bool is_done_ = false;
     bool registered = false;
+    bool is_order_error = false;    // 是否发生点单错误
     QString getMenuFromServer();
 
 public slots:

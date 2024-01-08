@@ -67,6 +67,8 @@ void TcpClient::readFromServer(){
         is_done_ = true;
     }else if(type == "OK"){
         registered = true;
+    }else if(type == "ORDER_ERROR"){
+        is_order_error = true;
     }
 }
 

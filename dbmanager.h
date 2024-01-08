@@ -33,7 +33,7 @@ public:
     // 显示订单详情
     void getQrderdetailsAll();  
     // 做菜后修改菜品库存
-    void handleOrder(QString name, int num);
+    bool handleOrder(QString name, int num);
     // 注册时查询用户是否存在
     bool isexisted(const QString& name);
 

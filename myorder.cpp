@@ -1,6 +1,7 @@
 #include "myorder.h"
 #include "ui_myorder.h"
 #include "tcpclient.h"
+#include "mainwindow.h"
 
 
 // 创建一行信息
@@ -80,7 +81,7 @@ void MyOrder::creatItem(){
 
 void MyOrder::myOrderButton_clicked(){
     QMessageBox::StandardButton box;
-    box = QMessageBox::question(this, "提示", "确定要下单嘛?", QMessageBox::Yes|QMessageBox::No);
+    box = QMessageBox::question(this, "提示", "确定要下单吗?", QMessageBox::Yes|QMessageBox::No);
     if(box==QMessageBox::Yes){
         QString order;
         QDateTime dateTime= QDateTime::currentDateTime();
@@ -88,25 +89,30 @@ void MyOrder::myOrderButton_clicked(){
         for(int i=0; i<total_num_; i++){
             order += item_[i].name + "#" + QString::number(item_[i].price) + "#" + QString::number(item_[i].num) + "$";
         }
-        qDebug() << order;
         TcpClient::WriteToServer(order, "ORDER");
-        qDebug() << "已下单";
-
-        TcpClient& instance = TcpClient::getInstance();
-        if(TcpClient::server == NULL){
-            qDebug() << "NULL";
-        }
 
         QEventLoop loop;
         connect(TcpClient::server, SIGNAL(readyRead()), &loop, SLOT(quit()));
         loop.exec();
 
-        if(instance.is_done_ == true){
-            box = QMessageBox::question(this, "取餐提醒", "请取单");
-            if(box==QMessageBox::Yes){
-                delete ui->scrollArea->widget();
-                ui->label_total_price->setText("0元");
+        emit triggerInit();
+
+
+        qDebug() << instance.is_order_error;
+        if(!instance.is_order_error){
+
+            if(instance.is_done_ == true){
+
+
+                box = QMessageBox::question(this, "取餐提醒", "请取单");
+                if(box==QMessageBox::Yes){
+                    delete ui->scrollArea->widget();
+                    ui->label_total_price->setText("0元");
+                }
             }
+        }else{
+            qDebug() << "ERROR!!!!!!!!!!!!!!!!!!!!";
         }
     }
+
 }

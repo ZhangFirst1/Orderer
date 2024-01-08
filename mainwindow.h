@@ -39,10 +39,16 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
     QWidget* createRowWidget(const QString &labelText1, const double &labelText2, const int &labelText3, const QString &buttonText,int i);
+
+signals:
+    void triggerInit();
 
 private slots:
     void myOrderButton_clicked();
+    void Init();
+
 
 private:
     Ui::MainWindow *ui;

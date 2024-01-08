@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QDateTime>
+#include "tcpclient.h"
 
 struct items{
     QString name;
@@ -46,6 +47,7 @@ private:
     double total = 0.0; // 总价格
     bool flag = false;
     QVBoxLayout *scrollLayout = new QVBoxLayout();
+    TcpClient& instance = TcpClient::getInstance();
 
 };
 

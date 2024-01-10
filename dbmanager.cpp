@@ -130,7 +130,7 @@ QString DbManager::getMenuToClient(){
 }
 
 // 做菜后修改菜品库存
-void DbManager::handleOrder(QString name, int num){
+bool DbManager::handleOrder(QString name, int num){
     model->setTable("menu");
     model->setFilter(QString("dishname = '%1'").arg(name));
     model->select();
@@ -141,6 +141,7 @@ void DbManager::handleOrder(QString name, int num){
 
         // 获取菜品数量列的当前值
         int currentQuantity = record.value("store").toInt();
+        if(currentQuantity < num) return false;
 
         // 指定需要减去的数量
         int specifiedQuantity = num;
@@ -153,6 +154,24 @@ void DbManager::handleOrder(QString name, int num){
             qDebug() << "Update successful.";
         }
     }
+    return true;
+}
+// 根据菜品查数量
+int DbManager::queryStoreByDish(const QString& name){
+    model->setTable("menu");
+    model->setFilter(QString("dishname = '%1'").arg(name));
+    model->select();
+
+    if (model->rowCount() > 0) {
+        // 获取第一行记录
+        QSqlRecord record = model->record(0);
+
+        // 获取菜品数量列的当前值
+        int currentQuantity = record.value("store").toInt();
+
+        return currentQuantity;
+    }
+    return 0;
 }
 
 // 注册时查询用户是否存在

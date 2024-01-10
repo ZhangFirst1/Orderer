@@ -22,6 +22,7 @@ private slots:
     void backButton_clicked();
 
 private:
+    void paintEvent(QPaintEvent *event);
     Ui::StatisticalTable *ui;
     std::map<QString, int> sales;
     TcpServers& instance = TcpServers::getInstance();

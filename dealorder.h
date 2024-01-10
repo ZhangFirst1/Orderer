@@ -33,6 +33,7 @@ private slots:
     void on_dealorderreturnButton_clicked();
 
 private:
+    void paintEvent(QPaintEvent *event);
     Ui::dealorder *ui;
     TcpServers& instance = TcpServers::getInstance();
     DbManager& DbInstance = DbManager::getDbInstance();

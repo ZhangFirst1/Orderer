@@ -6,6 +6,8 @@
 #include <QWidget>
 #include <QSqlTableModel>
 #include <QMessageBox>
+#include <QPainter>
+
 namespace Ui {
 class clientdbview;
 }
@@ -20,6 +22,8 @@ public:
 
     bool isconnect(QString const&dbName);
 
+private:
+    void paintEvent(QPaintEvent *event);
 
 private slots:
     void clientview_clicked();
@@ -28,8 +32,6 @@ private slots:
     void clientupdate_clicked();
     void clientdelete_clicked();
     void client_back_clicked();
-
-    //void on_updateButton_clicked();
 
 private:
     Ui::clientdbview *ui;

@@ -89,6 +89,27 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    Init();
+
+    connect(ui->myOrderButton, &QPushButton::clicked, this, &MainWindow::myOrderButton_clicked);
+}
+
+void MainWindow::Init(){
+    if(ui->scrollArea->widget()->layout()){
+        QVBoxLayout *subVBox = qobject_cast<QVBoxLayout*>(ui->scrollArea->widget()->layout());
+        QLayoutItem *child;
+        while ((child = subVBox->takeAt(0)) != nullptr) {
+            if (QWidget *widget = child->widget()) {
+                // 删除QWidget
+                delete widget;
+            }
+        }
+
+        delete ui->scrollArea->widget()->layout();
+        ui->scrollArea->widget()->setLayout(nullptr);
+        //ui->scrollArea->show();
+    }
+
     order_num_ = 0;
     // 从后端获取数据
 
@@ -121,23 +142,22 @@ MainWindow::MainWindow(QWidget *parent)
             curstore[i].number = store;
             curstore[i].name = dish_name;
 
-            QWidget* rowWidge1 = createRowWidget(dish_name, price , store, "下单",i);
+            QWidget* rowWidge1 = createRowWidget(dish_name, price , store, "下单", i);
             scrollLayout->addWidget(rowWidge1);
         }
     }
     ui->scrollArea->widget()->setLayout(scrollLayout);
-
-    connect(ui->myOrderButton, &QPushButton::clicked, this, &MainWindow::myOrderButton_clicked);
 }
 
 void MainWindow::myOrderButton_clicked(){
     this->hide();
     MyOrder* order = new MyOrder(this);
 
+    connect(order, &MyOrder::orderError, this, &MainWindow::Init);
     // 接受MyOrder类传递的删除信号
     connect(order, &MyOrder::sendData, this, [=](const int num,const QString dishname){
         this->item_[num].num -= 1;
-        //this->item_[num].price -=
+
         for(int i=0;i<menuNumber;i++){
             if(curstore[i].name == dishname)
             {
@@ -151,7 +171,6 @@ void MainWindow::myOrderButton_clicked(){
                 }
             }
         }
-
     });
 
     // 接受到后台订单处理完成信息
@@ -180,4 +199,21 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+//重写 paintEvent 函数，在这里绘制背景图
+void MainWindow::paintEvent(QPaintEvent *event) {
+    QWidget::paintEvent(event);
+
+    QPainter painter(this);
+
+    // 获取当前窗口的大小
+    QSize widgetSize = size();
+
+    // 从文件加载背景图（这里需要替换为你的实际路径）
+    QPixmap backgroundImage(":/background/cloud2.jpg");
+
+    // 绘制背景图并进行自适应大小处理
+    painter.drawPixmap(0, 0, widgetSize.width(), widgetSize.height(), backgroundImage);
+}
+
 

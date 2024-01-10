@@ -16,9 +16,11 @@ public:
     static void WriteToServer(const QString& s,const QString& type);
     static void WriteToServer(const QString& type);
 
-    bool isLogin_ = false;
-    bool is_done_ = false;
-    bool registered = false;
+    bool isLogin_ = false;          // 登录状态
+    bool is_done_ = false;          // 订单处理完成
+    bool registered = false;        // 注册状态
+    bool is_order_error = false;    // 订单处理发生错误
+    bool has_order = false;         // 是否已经下单
     QString getMenuFromServer();
 
 public slots:

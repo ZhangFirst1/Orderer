@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QMainWindow>
+#include <QPainter>
 
 
 namespace Ui {
@@ -16,6 +17,10 @@ class backend : public QWidget
 public:
     explicit backend(QWidget *parent = nullptr);
     ~backend();
+
+private:
+    void paintEvent(QPaintEvent *event);
+
 private slots:
     void clientButton_clicked();
     void menuButton_clicked();

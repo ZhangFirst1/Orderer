@@ -1,5 +1,6 @@
 #include "registering.h"
 #include "ui_registering.h"
+#include "tcpclient.h"
 
 Registering::Registering(QWidget *parent)
     : QWidget(parent)
@@ -62,4 +63,20 @@ void Registering::returnButton_clicked()
 {
     this->close();
     parentWidget()->show();
+}
+
+//重写 paintEvent 函数，在这里绘制背景图
+void Registering::paintEvent(QPaintEvent *event) {
+    QWidget::paintEvent(event);
+
+    QPainter painter(this);
+
+    // 获取当前窗口的大小
+    QSize widgetSize = size();
+
+    // 从文件加载背景图（这里需要替换为你的实际路径）
+    QPixmap backgroundImage(":/background/cloud2.jpg");
+
+    // 绘制背景图并进行自适应大小处理
+    painter.drawPixmap(0, 0, widgetSize.width(), widgetSize.height(), backgroundImage);
 }

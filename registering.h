@@ -6,8 +6,8 @@
 #include <QMessageBox>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QPainter>
 #include "dbmanager.h"
-#include "tcpclient.h"
 
 namespace Ui {
 class Registering;
@@ -26,6 +26,7 @@ private slots:
     void returnButton_clicked();
 
 private:
+    void paintEvent(QPaintEvent *event);
     Ui::Registering *ui;
     DbManager instance = DbManager::getDbInstance();
 };

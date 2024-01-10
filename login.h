@@ -20,6 +20,7 @@ private slots:
     void adminButton_clicked();
     void registerButton_clicked();
 private:
+    void paintEvent(QPaintEvent *event);
     Ui::Login *ui;
 };
 

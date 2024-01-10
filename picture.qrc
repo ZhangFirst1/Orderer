@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/background">
+        <file>cloud1.jpg</file>
+        <file>cloud2.jpg</file>
+    </qresource>
+</RCC>

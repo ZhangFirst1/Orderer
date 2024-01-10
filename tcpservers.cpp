@@ -157,33 +157,57 @@ void TcpServers::handleOrder(QString& content){
     order_items_[total_order_].order_num = cnt;
     content.remove(0, cnt_string.size()+user_name.size()+date.size()+3);
 
-    // 处理分割后的信息
-    for(int i=0; i < cnt; i++){
-        // 菜名 价格 库存
+    bool flag = true;
+    // 第一次现判断是否所有的菜数量都足够
+    for(int i=0; i < cnt;i++){
         QString row_now = content.section("$", i, i);
         QString dish_name = row_now.section("#", 0, 0);
         double price = row_now.section("#", 1, 1).toDouble();
         int store = row_now.section("#", 2, 2).toInt();
 
-        order_items_[total_order_].order[i].name = dish_name;
-        order_items_[total_order_].order[i].price = price;
-        order_items_[total_order_].order[i].store = store;
-        order_items_[total_order_].date = date;
-        order_items_[total_order_].user_name = user_name;
-        updateSales(dish_name, store);
+        int db_store = db_manager.queryStoreByDish(dish_name);
+        if(db_store < store){   // 不满足
+            flag = false;
+            break;
+        }
     }
-    total_order_++;
+
+    if(flag){
+        for(int i=0; i < cnt; i++){
+            // 菜名 价格 库存
+            QString row_now = content.section("$", i, i);
+            QString dish_name = row_now.section("#", 0, 0);
+            double price = row_now.section("#", 1, 1).toDouble();
+            int store = row_now.section("#", 2, 2).toInt();
+
+            if(db_manager.handleOrder(dish_name, store)){
+                order_items_[total_order_].order[i].name = dish_name;
+                order_items_[total_order_].order[i].price = price;
+                order_items_[total_order_].order[i].store = store;
+                order_items_[total_order_].date = date;
+                order_items_[total_order_].user_name = user_name;
+
+                updateSales(dish_name, store);
+            }
+        }
+        total_order_++; // 总订单数+1
+    }else{
+        for(auto it: socket_list){
+            qDebug() << it->property("username").toString();
+            if(it->property("username") == user_name){
+                it->write("ORDER_ERROR");
+            }
+        }
+    }
 }
 
 void TcpServers::sendOrderDoneToClinet(const QString& username){
     QByteArray text = "ORDER_DONE ";
-    // m_client->write(text);
+
     // 遍历找到要发送信息的客户端
-    qDebug() << username;
     for(auto it: socket_list){
         qDebug() << it->property("username").toString();
         if(it->property("username") == username){
-            qDebug() << "判断成功" << it->property("username").toString();
             it->write(text);
         }
     }

@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QSqlTableModel>
 #include <QMessageBox>
+#include <QPainter>
 #include "dealorder.h"
 
 
@@ -26,6 +27,7 @@ private slots:
     void on_odreturnButton_clicked();
 
 private:
+    void paintEvent(QPaintEvent *event);
     Ui::orderdetails *ui;
     int id;
     struct OneOrder* one_order_;

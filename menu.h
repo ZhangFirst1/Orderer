@@ -5,6 +5,8 @@
 #include <QWidget>
 #include <QSqlTableModel>
 #include <QMessageBox>
+#include <QPainter>
+
 namespace Ui {
 class menu;
 }
@@ -26,6 +28,7 @@ private slots:
     void on_menuqueryButton_clicked();
 
 private:
+    void paintEvent(QPaintEvent *event);
     Ui::menu *ui;
     DbManager menu_db_manager = DbManager::getDbInstance();
 };

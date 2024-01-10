@@ -52,6 +52,13 @@ MyOrder::MyOrder(QWidget *parent)
 {
     ui->setupUi(this);
     memset(item_, 0, sizeof item_);
+
+    // 已经下单 再次创建时禁用下单按钮
+    if(instance.has_order){
+        ui->orderButton->setEnabled(false);
+        ui->orderButton->setText("美味制作中");
+    }
+
     connect(ui->backButton, &QPushButton::clicked, this, &MyOrder::backButton_clicked);
     connect(ui->orderButton, &QPushButton::clicked, this, &MyOrder::myOrderButton_clicked);
 }
@@ -62,6 +69,8 @@ MyOrder::~MyOrder()
 }
 
 void MyOrder::backButton_clicked(){
+    emit orderError();
+
     this->close();
     parentWidget()->show();
 }
@@ -82,31 +91,61 @@ void MyOrder::myOrderButton_clicked(){
     QMessageBox::StandardButton box;
     box = QMessageBox::question(this, "提示", "确定要下单嘛?", QMessageBox::Yes|QMessageBox::No);
     if(box==QMessageBox::Yes){
+        // 下单一次后在处理完成前 禁止下单
+        ui->orderButton->setEnabled(false);
+        ui->orderButton->setText("美味制作中");
+        instance.has_order = true;
+        // 加工数据传给后台
         QString order;
         QDateTime dateTime= QDateTime::currentDateTime();
         order += QString::number(total_num_) + "@" + TcpClient::name + "@" + dateTime.toString() + "@";
         for(int i=0; i<total_num_; i++){
             order += item_[i].name + "#" + QString::number(item_[i].price) + "#" + QString::number(item_[i].num) + "$";
         }
-        qDebug() << order;
         TcpClient::WriteToServer(order, "ORDER");
-        qDebug() << "已下单";
 
         TcpClient& instance = TcpClient::getInstance();
-        if(TcpClient::server == NULL){
-            qDebug() << "NULL";
-        }
 
         QEventLoop loop;
         connect(TcpClient::server, SIGNAL(readyRead()), &loop, SLOT(quit()));
         loop.exec();
 
-        if(instance.is_done_ == true){
-            box = QMessageBox::question(this, "取餐提醒", "请取单");
-            if(box==QMessageBox::Yes){
+        if(instance.is_order_error){
+            // 发生错误
+            QMessageBox::warning(this, "警告", "库存不足，请重新下单");
+
+            // 更新MainWindows页面
+            emit orderError();
+        }else{
+            // 订单处理成功
+            if(instance.is_done_ == true){
+                instance.has_order = false;
+                ui->orderButton->setEnabled(true);
+                ui->orderButton->setText("下单");
+                QMessageBox::information(this, "取餐提醒", "请取单");
+
                 delete ui->scrollArea->widget();
                 ui->label_total_price->setText("0元");
+
+                // 更新MainWindows页面
+                emit orderError();
             }
         }
     }
+}
+
+//重写 paintEvent 函数，在这里绘制背景图
+void MyOrder::paintEvent(QPaintEvent *event) {
+    QWidget::paintEvent(event);
+
+    QPainter painter(this);
+
+    // 获取当前窗口的大小
+    QSize widgetSize = size();
+
+    // 从文件加载背景图（这里需要替换为你的实际路径）
+    QPixmap backgroundImage(":/background/cloud2.jpg");
+
+    // 绘制背景图并进行自适应大小处理
+    painter.drawPixmap(0, 0, widgetSize.width(), widgetSize.height(), backgroundImage);
 }

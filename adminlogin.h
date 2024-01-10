@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QSqlDatabase>
-
+#include <QPainter>
 
 
 namespace Ui {
@@ -25,6 +25,7 @@ private slots:
     void loginButton_click();
 
 private:
+    void paintEvent(QPaintEvent *event);
     Ui::AdminLogin *ui;
     bool isAdmin;
 };

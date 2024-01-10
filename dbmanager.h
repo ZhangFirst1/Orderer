@@ -33,12 +33,14 @@ public:
     // 显示订单详情
     void getQrderdetailsAll();  
     // 做菜后修改菜品库存
-    void handleOrder(QString name, int num);
+    bool handleOrder(QString name, int num);
     // 注册时查询用户是否存在
     bool isexisted(const QString& name);
-
     //用sql语句在客户表中插入数据
     void addClientSql(const QString& name, const QString& pwd);
+    // 根据菜品查数量
+    int queryStoreByDish(const QString& name);
+
 
 
     QSqlTableModel *model;

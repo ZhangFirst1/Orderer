@@ -7,6 +7,8 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QDateTime>
+#include <QPainter>
+#include "tcpclient.h"
 
 struct items{
     QString name;
@@ -38,15 +40,17 @@ private slots:
 
 signals:
     void sendData(const int num,const QString dishname);
+    void orderError();
 
 private:
+    void paintEvent(QPaintEvent *event);
     int total_num_ = 0; // 我的订单中菜品总数
     items item_[50];    // 我的订单中菜品
     Ui::MyOrder *ui;
     double total = 0.0; // 总价格
     bool flag = false;
     QVBoxLayout *scrollLayout = new QVBoxLayout();
-
+    TcpClient& instance = TcpClient::getInstance();
 };
 
 #endif // MYORDER_H

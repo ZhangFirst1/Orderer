@@ -8,9 +8,10 @@
 #include <QString>
 #include <QValidator>
 #include <Qt>
-#include "tcpclient.h"
+#include <QPainter>
 #include <QLabel>
 #include <QPushButton>
+#include "tcpclient.h"
 
 struct MyItems{
     QString name;
@@ -43,8 +44,10 @@ public:
 
 private slots:
     void myOrderButton_clicked();
+    void Init();
 
 private:
+    void paintEvent(QPaintEvent *event);
     Ui::MainWindow *ui;
     int order_num_;     // 已经点单的菜的种类
     MyItems item_[50];

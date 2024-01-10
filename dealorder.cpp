@@ -50,11 +50,12 @@ QWidget * dealorder::createdealRowWidget(const QString &deallabelText1, const QS
         button2->setEnabled(false);
         this->over_orders |= (1 << index);
 
-        for(int i=0; i < this->dealitem_[index].order_num; i++){
-            qDebug() << dealitem_[index].user_name;
-            DbInstance.handleOrder(this->dealitem_[index].order[i].name, this->dealitem_[index].order[i].store);
+        // 订单的数据库操作
+        // for(int i=0; i < this->dealitem_[index].order_num; i++){
+        //     qDebug() << dealitem_[index].user_name;
+        //     DbInstance.handleOrder(this->dealitem_[index].order[i].name, this->dealitem_[index].order[i].store);
 
-        }
+        // }
 
         instance.sendOrderDoneToClinet(deallabelText2);
     });
@@ -101,3 +102,18 @@ void dealorder::on_dealorderreturnButton_clicked()
     parentWidget()->show();
 }
 
+//重写 paintEvent 函数，在这里绘制背景图
+void dealorder::paintEvent(QPaintEvent *event) {
+    QWidget::paintEvent(event);
+
+    QPainter painter(this);
+
+    // 获取当前窗口的大小
+    QSize widgetSize = size();
+
+    // 从文件加载背景图（这里需要替换为你的实际路径）
+    QPixmap backgroundImage(":/background/cloud1.jpg");
+
+    // 绘制背景图并进行自适应大小处理
+    painter.drawPixmap(0, 0, widgetSize.width(), widgetSize.height(), backgroundImage);
+}

@@ -69,8 +69,6 @@ MyOrder::~MyOrder()
 }
 
 void MyOrder::backButton_clicked(){
-    emit orderError();
-
     this->close();
     parentWidget()->show();
 }

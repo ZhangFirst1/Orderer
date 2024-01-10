@@ -162,7 +162,6 @@ void TcpServers::handleOrder(QString& content){
     for(int i=0; i < cnt;i++){
         QString row_now = content.section("$", i, i);
         QString dish_name = row_now.section("#", 0, 0);
-        double price = row_now.section("#", 1, 1).toDouble();
         int store = row_now.section("#", 2, 2).toInt();
 
         int db_store = db_manager.queryStoreByDish(dish_name);

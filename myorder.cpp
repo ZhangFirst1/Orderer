@@ -69,8 +69,6 @@ MyOrder::~MyOrder()
 }
 
 void MyOrder::backButton_clicked(){
-    emit orderError();
-
     this->close();
     parentWidget()->show();
 }
@@ -91,6 +89,12 @@ void MyOrder::myOrderButton_clicked(){
     QMessageBox::StandardButton box;
     box = QMessageBox::question(this, "提示", "确定要下单嘛?", QMessageBox::Yes|QMessageBox::No);
     if(box==QMessageBox::Yes){
+        //如果下空单
+        if(this->total_num_==0)
+        {
+            QMessageBox::warning(this,"警告","订单不能为空");
+        }
+        else{
         // 下单一次后在处理完成前 禁止下单
         ui->orderButton->setEnabled(false);
         ui->orderButton->setText("美味制作中");
@@ -113,6 +117,11 @@ void MyOrder::myOrderButton_clicked(){
         if(instance.is_order_error){
             // 发生错误
             QMessageBox::warning(this, "警告", "库存不足，请重新下单");
+            ui->orderButton->setEnabled(true);
+            ui->orderButton->setText("下单");
+            instance.has_order = false;
+            instance.is_order_error = false;
+            delete ui->scrollArea->widget();
 
             // 更新MainWindows页面
             emit orderError();
@@ -131,7 +140,9 @@ void MyOrder::myOrderButton_clicked(){
                 emit orderError();
             }
         }
-    }
+      }
+
+    } //box的if
 }
 
 //重写 paintEvent 函数，在这里绘制背景图

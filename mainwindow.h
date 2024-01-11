@@ -44,6 +44,7 @@ public:
 
 private slots:
     void myOrderButton_clicked();
+    void returnButton_clicked();
     void Init();
 
 private:

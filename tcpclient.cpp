@@ -25,7 +25,7 @@ void TcpClient::Init(){
     // 创建客户端Socket
     server = new QTcpSocket();
     // 连接服务器端
-    server->connectToHost(QHostAddress("127.0.0.1"), 8000);
+    server->connectToHost(QHostAddress("192.168.137.1"), 8000); //192.168.137.1
     connect(server, &QTcpSocket::readyRead, this, &TcpClient::readFromServer);
     connect(server, &QTcpSocket::disconnected, this, &TcpClient::handleDisconnected);
 

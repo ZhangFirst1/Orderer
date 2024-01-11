@@ -40,9 +40,9 @@ void Login::loginButton_clicked(){
 
     if(instance.isLogin_ == true){
         TcpClient::name = ui->userEdit->text();
-        MainWindow* main_window = new MainWindow();
+        MainWindow* main_window = new MainWindow(this); //
         main_window->show();
-        this->close();
+        this->hide(); //
     }else{
         qDebug() << "error";
     }

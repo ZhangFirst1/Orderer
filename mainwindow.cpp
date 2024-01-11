@@ -92,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent)
     Init();
 
     connect(ui->myOrderButton, &QPushButton::clicked, this, &MainWindow::myOrderButton_clicked);
+    connect(ui->returnButton,&QPushButton::clicked,this,&MainWindow::returnButton_clicked);
 }
 
 void MainWindow::Init(){
@@ -214,6 +215,11 @@ void MainWindow::paintEvent(QPaintEvent *event) {
 
     // 绘制背景图并进行自适应大小处理
     painter.drawPixmap(0, 0, widgetSize.width(), widgetSize.height(), backgroundImage);
+}
+void MainWindow::returnButton_clicked()
+{
+    this->close();
+    parentWidget()->show();
 }
 
 

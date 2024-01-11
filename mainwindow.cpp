@@ -50,9 +50,7 @@ QWidget* MainWindow::createRowWidget(const QString &labelText1, const double &la
                 button->setEnabled(false);
             }
 
-
         bool flag = false;
-        qDebug() << order_num_;
         for(int i=0;i<order_num_;i++){
             if(item_[i].name == labelText1){
                 this->item_[i].num += le->text().toInt();
